@@ -1,6 +1,7 @@
-from collections import defaultdict
 import pandas as pd
 import os
+
+from swipe import Swipe, SwipeSet
 
 
 def grab_first():
@@ -28,13 +29,13 @@ def unique_sentences(df: pd.DataFrame):
 def into_swipe_set(df: pd.DataFrame):
     data = df.iloc[:, :1].values.tolist()
     unique = unique_sentences(df)
-    store = defaultdict(list)
+    store = []
     for sentence in unique:
         for row in data:
             string = row[0]
             sep = " "
             found = string.split(sep, 1)[0]
-            remaining = string.split(sep, 1)[1:]
+            remaining = str(string.split(sep, 1)[1:])
             if found == sentence:
-                store[sentence].append(remaining)
+                store.append(Swipe(sentence, remaining))
     return store
