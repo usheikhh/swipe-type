@@ -1,4 +1,4 @@
-from swipe_extractor import grab_first, into_swipe_set, unique_sentences
+from swipe_extractor import grab_first, into_swipe_set
 
 
 if __name__ == "__main__":
