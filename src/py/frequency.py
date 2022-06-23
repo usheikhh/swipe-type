@@ -10,6 +10,20 @@ def select_files(dir_path: str):
     return files
 
 
+def get_word_frequencies(file_list):
+    words = []
+    # f = select_files(os.path.join(os.getcwd(), "data"))
+    for name in file_list:
+        file_name = open(os.path.join(os.getcwd(), "data", name), "r")
+        lines = file_name.readlines()
+        for line in lines:
+            word = list(line.split(" "))[10]
+            words.append(word)
+    # print(words)
+    c = Counter(words)
+    print(c)
+
+
 if __name__ == "__main__":
     f = [
         "8k50vo7cakvqthn0v6fdftl1ab.log",
@@ -23,14 +37,4 @@ if __name__ == "__main__":
         "ol08ng1j74i3togha376tc8e4m.log",
         "rnfhojlb55ags2q176qd0i7k3n.log",
     ]
-    words = []
-    # f = select_files(os.path.join(os.getcwd(), "data"))
-    for name in f:
-        file_name = open(os.path.join(os.getcwd(), "data", name), "r")
-        lines = file_name.readlines()
-        for line in lines:
-            word = list(line.split(" "))[10]
-            words.append(word)
-    # print(words)
-    c = Counter(words)
-    print(c)
+get_word_frequencies(f)
