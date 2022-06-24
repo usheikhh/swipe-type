@@ -136,6 +136,7 @@ function plot() {
 
   //    // DEBUG: Draw sokgraph (expected swipe path).
   var swipeKeys = row.word.split("").map(getKeyFromChar);
+  //   console.log("keys:" + JSON.stringify(swipeKeys));
   ctx.beginPath();
   ctx.lineWidth = 2;
   ctx.strokeStyle = "red";
@@ -144,6 +145,19 @@ function plot() {
     var currKey = getKeyCenter(swipeKeys[i]);
     ctx.moveTo(prevKey.x, prevKey.y);
     ctx.lineTo(currKey.x, currKey.y);
+    //TODO: Why are the center's coordinates so different from the coordinates stored in the swipeKeys initially?
+    console.log(
+      "Key " +
+        swipeKeys[i - 1].char +
+        " Previous key center:" +
+        JSON.stringify(prevKey)
+    );
+    console.log(
+      "Key " +
+        swipeKeys[i].char +
+        " Current key center:" +
+        JSON.stringify(currKey)
+    );
   }
   ctx.stroke();
 
