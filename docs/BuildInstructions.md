@@ -34,6 +34,12 @@ Install prerequisite dependencies to the node canvas package
 brew install pkg-config cairo pango libpng jpeg giflib librsvg
 ```
 
+Export the package configuration path
+
+```console
+export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/opt/X11/lib/pkgconfig
+```
+
 Install dependencies in `package.json`
 
 **NOTE**: This command must be run when in the `js` directory
