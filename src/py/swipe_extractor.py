@@ -98,10 +98,11 @@ def create_swipes(timestamps: List[str], word: str, intervals):
         for element in index_range:
             time = timestamps[element]
             times.append(time)
-        swipe = [word, times]
+        swipe = Swipe(word, times)
         # print(len(times))
         # print(swipe)
         swipe_list.append(swipe)
         # print(len(swipe_list))
+        # Clear the existing times before iterating again
         times = []
     return swipe_list

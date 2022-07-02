@@ -19,4 +19,4 @@ if __name__ == "__main__":
     intervals = into_intervals(indices)
     swipes = create_swipes(timestamps, word, intervals)
     for swipe in swipes:
-        print(len(swipe[1]))
+        print(swipe.stringify())
