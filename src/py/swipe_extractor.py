@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 from typing import List
-from swipe import Swipe
+from swipe import Backing_File, Swipe
 from pathlib import Path
 
 THRESHOLD = 30
@@ -133,7 +133,7 @@ def into_intervals(indices: List[int]):
     return intervals
 
 
-def create_swipes(timestamps: List[str], word: str, intervals):
+def create_swipes(timestamps: List[str], word: str, intervals, path: str):
     ranges = []
     for interval in intervals:
         ranges.append(list(range(interval[0], interval[1] + 1)))
@@ -144,7 +144,7 @@ def create_swipes(timestamps: List[str], word: str, intervals):
         for element in index_range:
             time = timestamps[element]
             times.append(time)
-        swipe = Swipe(word, times)
+        swipe = Swipe(word, Backing_File(path), times)
         # print(len(times))
         # print(swipe)
         swipe_list.append(swipe)

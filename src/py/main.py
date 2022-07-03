@@ -36,7 +36,12 @@ if __name__ == "__main__":
         intervals = into_intervals(indices)
         print(intervals)
         # input()
-        swipes = create_swipes(timestamps, word, intervals)
+        swipes = create_swipes(
+            timestamps,
+            word,
+            intervals,
+            os.path.join(os.getcwd(), "src", "py", "temp", unique_word + ".log"),
+        )
         for swipe in swipes:
             print(swipe.stringify())
 
