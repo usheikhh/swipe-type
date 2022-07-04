@@ -109,7 +109,18 @@ def compute_timestamp_deltas(timestamps: List[int]):
     return deltas
 
 
+def precheck_deltas(deltas: List[int]):
+    for delta in deltas:
+        if delta < THRESHOLD:
+            continue
+        if delta > THRESHOLD:
+            return False
+    return True
+
+
 def extract_swipes_indices(deltas: List[int]):
+    if precheck_deltas(deltas) == True:
+        return None
     above = []
     for i in range(0, len(deltas)):
         if deltas[i] >= THRESHOLD:

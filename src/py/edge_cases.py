@@ -1,4 +1,5 @@
 import os
+import warnings
 from swipe_extractor import (
     extract_timestamps_from_file,
     compute_timestamp_deltas,
@@ -40,11 +41,14 @@ def me_word_test():
     print("Diff:", delta)
     indices = extract_swipes_indices(delta)
     print(indices)
-    # intervals = into_intervals(indices)
-    # print(intervals)
-    # swipes = create_swipes(timestamps, word, intervals)
-    # for swipe in swipes:
-    #     print(swipe.stringify())
+    if indices is not None:
+        intervals = into_intervals(indices)
+        print(intervals)
+        swipes = create_swipes(timestamps, word, intervals)
+        for swipe in swipes:
+            print(swipe.stringify())
+    if indices is None:
+        warnings.warn("No indices above the threshold, so swipes cannot be made")
 
 
 def vanke_word_test():
@@ -68,4 +72,4 @@ def told_word_test():
 
 
 if __name__ == "__main__":
-    told_word_test()
+    me_word_test()

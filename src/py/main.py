@@ -10,7 +10,7 @@ from swipe_extractor import (
     write_to_file,
 )
 import os
-
+import warnings
 
 if __name__ == "__main__":
     words = unique_words_from_file(
@@ -32,19 +32,21 @@ if __name__ == "__main__":
         delta = compute_timestamp_deltas(timestamps)
         # print(delta)
         indices = extract_swipes_indices(delta)
-        # print(indices)
-        intervals = into_intervals(indices)
-        print(intervals)
-        # input()
-        swipes = create_swipes(
-            timestamps,
-            word,
-            intervals,
-            os.path.join(os.getcwd(), "src", "py", "temp", unique_word + ".log"),
-        )
-        for swipe in swipes:
-            print(swipe.stringify())
-
+        if indices is not None:
+            # print(indices)
+            intervals = into_intervals(indices)
+            print(intervals)
+            # input()
+            swipes = create_swipes(
+                timestamps,
+                word,
+                intervals,
+                os.path.join(os.getcwd(), "src", "py", "temp", unique_word + ".log"),
+            )
+            for swipe in swipes:
+                print(swipe.stringify())
+        elif indices is None:
+            warnings.warn("No indices above the threshold, so swipes cannot be made")
     # timestamps, word = extract_timestamps_from_file(
     #     os.path.join(os.getcwd(), "src", "py", "delay.log")
     # )
