@@ -21,7 +21,7 @@ class Backing_File:
 
 
 class Swipe:
-    def __init__(self, key, backing_file, swipe_data):
+    def __init__(self, key: str, backing_file: Backing_File, swipe_data):
         self.key = key
         self.backing_file = backing_file
         self.swipe_data = swipe_data
@@ -29,32 +29,48 @@ class Swipe:
     def get_key(self):
         return self.key
 
-    def x_pos(self):
-        pass
+    def x_pos(self, timestamp: str):
+        row = self.get_backing_file().lookup_row_by_timestamp(timestamp)
+        return row[5]
 
-    def y_pos(self):
-        pass
+    def y_pos(self, timestamp: str):
+        row = self.get_backing_file().lookup_row_by_timestamp(timestamp)
+        return row[6]
 
-    def sentence(self):
-        pass
+    def sentence(self, timestamp: str):
+        row = self.get_backing_file().lookup_row_by_timestamp(timestamp)
+        return row[0]
 
     def first_and_last_timestamp(self):
-        pass
+        return (self.swipe_data[0], self.swipe_data[-1])
 
-    def event(self):
-        pass
+    def last_timestamp(self):
+        return self.swipe_data[-1]
 
-    def x_radius(self):
-        pass
+    def first_timestamp(self):
+        return self.swipe_data[0]
 
-    def y_radius(self):
-        pass
+    def event(self, timestamp: str):
+        row = self.get_backing_file().lookup_row_by_timestamp(timestamp)
+        return row[4]
 
-    def get_word(self):
-        pass
+    def x_radius(self, timestamp: str):
+        row = self.get_backing_file().lookup_row_by_timestamp(timestamp)
+        return row[7]
+
+    def y_radius(self, timestamp: str):
+        row = self.get_backing_file().lookup_row_by_timestamp(timestamp)
+        return row[8]
+
+    def get_word(self, timestamp: str):
+        row = self.get_backing_file().lookup_row_by_timestamp(timestamp)
+        return row[10]
 
     def swipe_timestamps(self):
         return self.swipe_data
+
+    def timestamp_at(self, index: int):
+        return self.swipe_timestamps[index]
 
     def stringify(self):
         return f"Word: {self.key} Timestamps {self.swipe_data}"

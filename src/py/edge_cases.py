@@ -33,6 +33,7 @@ def i_word_test():
 
 def me_word_test():
     # TODO: We need to gracefully handle the case when none of the time deltas are greater than the threshold so that the rest of the protocol is not run
+    # TODO: There is a rudimentary fix in the code for this now, we just need to hook it up so that it knows to skip those files
     timestamps, word = extract_timestamps_from_file(
         os.path.join(os.getcwd(), "src", "py", "temp", "me.log"), False
     )
