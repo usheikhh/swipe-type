@@ -26,7 +26,12 @@ def i_word_test():
     print(indices)
     intervals = into_intervals(indices)
     print(intervals)
-    swipes = create_swipes(timestamps, word, intervals)
+    swipes = create_swipes(
+        timestamps,
+        word,
+        intervals,
+        os.path.join(os.getcwd(), "src", "py", "temp", "i.log"),
+    )
     for swipe in swipes:
         print(swipe.stringify())
 
@@ -73,4 +78,4 @@ def told_word_test():
 
 
 if __name__ == "__main__":
-    me_word_test()
+    i_word_test()

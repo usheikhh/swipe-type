@@ -11,42 +11,47 @@ from swipe_extractor import (
 )
 import os
 import warnings
+from tqdm import tqdm
 
 if __name__ == "__main__":
-    words = unique_words_from_file(
-        os.path.join(os.getcwd(), "data", "7s2subps693a12v4tqom3objuf.log")
-    )
-    # print(words)
-    for unique_word in words:
-        trajectories, word = extract_trajectories(
-            os.path.join(os.getcwd(), "data", "7s2subps693a12v4tqom3objuf.log"),
-            unique_word,
-        )
-        write_to_file(trajectories, unique_word)
-        timestamps, word = extract_timestamps_from_file(
-            os.path.join(os.getcwd(), "src", "py", "temp", unique_word + ".log")
-        )
-
-        # print("New:", timestamps)
-        print(unique_word)
-        delta = compute_timestamp_deltas(timestamps)
-        # print(delta)
-        indices = extract_swipes_indices(delta)
-        if indices is not None:
-            # print(indices)
-            intervals = into_intervals(indices)
-            print(intervals)
-            # input()
-            swipes = create_swipes(
-                timestamps,
-                word,
-                intervals,
-                os.path.join(os.getcwd(), "src", "py", "temp", unique_word + ".log"),
+    p = os.path.join(os.getcwd(), "data")
+    onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
+    for file in tqdm(onlyfiles):
+        print(file)
+        words = unique_words_from_file(os.path.join(os.getcwd(), "data", file))
+        # print(words)
+        for unique_word in words:
+            trajectories, word = extract_trajectories(
+                os.path.join(os.getcwd(), "data", file),
+                unique_word,
             )
-            for swipe in swipes:
-                print(swipe.stringify())
-        elif indices is None:
-            warnings.warn("No indices above the threshold, so swipes cannot be made")
+            write_to_file(trajectories, unique_word)
+            timestamps, word = extract_timestamps_from_file(
+                os.path.join(os.getcwd(), "src", "py", "temp", unique_word + ".log")
+            )
+
+            # print("New:", timestamps)
+            # print(unique_word)
+            delta = compute_timestamp_deltas(timestamps)
+            # print(delta)
+            indices = extract_swipes_indices(delta)
+            if indices is not None:
+                # print(indices)
+                intervals = into_intervals(indices)
+                # print(intervals)
+                # input()
+                swipes = create_swipes(
+                    timestamps,
+                    word,
+                    intervals,
+                    os.path.join(
+                        os.getcwd(), "src", "py", "temp", unique_word + ".log"
+                    ),
+                )
+            elif indices is None:
+                warnings.warn(
+                    "No indices above the threshold, so swipes cannot be made"
+                )
     # timestamps, word = extract_timestamps_from_file(
     #     os.path.join(os.getcwd(), "src", "py", "delay.log")
     # )

@@ -99,14 +99,26 @@ def extract_timestamps_from_lines(lines: List[str]):
 
 
 def compute_timestamp_deltas(timestamps: List[int]):
-    curr = int(timestamps[0])
-    # print("curr", curr)
-    deltas = []
-    for i in range(1, len(timestamps)):
-        delta = int(timestamps[i]) - curr
-        deltas.append(delta)
-        curr = int(timestamps[i])
-    return deltas
+    try:
+        # print(timestamps)
+        curr = int(timestamps[0])
+        # print("curr", curr)
+        deltas = []
+        for i in range(1, len(timestamps)):
+            delta = int(timestamps[i]) - curr
+            deltas.append(delta)
+            curr = int(timestamps[i])
+        return deltas
+    except ValueError:
+        # print(timestamps)
+        curr = int(timestamps[1])
+        print("curr", curr)
+        deltas = []
+        for i in range(2, len(timestamps)):
+            delta = int(timestamps[i]) - curr
+            deltas.append(delta)
+            curr = int(timestamps[i])
+        return deltas
 
 
 def precheck_deltas(deltas: List[int]):
@@ -119,6 +131,7 @@ def precheck_deltas(deltas: List[int]):
 
 
 def extract_swipes_indices(deltas: List[int]):
+    # print("Length of deltas: ", len(deltas))
     if precheck_deltas(deltas) == True:
         return None
     above = []
@@ -130,10 +143,14 @@ def extract_swipes_indices(deltas: List[int]):
 
 def into_intervals(indices: List[int]):
     intervals = []
+    # print("Length of indices: ", len(indices))
     if len(indices) == 0:
         raise ValueError("No indices provided")
     if len(indices) == 1:
-        interval = [0, indices[0]]
+        if indices[0] == 0:
+            interval = [0, indices[0] + len(indices)]
+        else:
+            interval = [0, indices[0]]
         intervals.append(interval)
         return intervals
     starting_index = 0
