@@ -17,6 +17,7 @@ from tqdm import tqdm
 
 if __name__ == "__main__":
     p = os.path.join(os.getcwd(), "data")
+    swipeset = []
     onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
     for file in tqdm(onlyfiles):
         print(file)
@@ -51,12 +52,15 @@ if __name__ == "__main__":
                         os.getcwd(), "src", "py", "temp", unique_word + ".log"
                     ),
                 )
+                swipeset.append(swipes)
             elif indices is None:
                 warnings.warn(
                     "No indices above the threshold, so swipes cannot be made"
                 )
-    for swipe in swipes:
-        print(swipe.get_key() + ": " + Feature_Extractor.length(swipe))
+    for swipes in swipeset:
+        for swipe in swipes:
+            print(swipe.get_key())
+            Feature_Extractor.extract_all_features(swipe)
     with open("data.pickle", "wb") as handle:
         pickle.dump(swipes, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
