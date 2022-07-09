@@ -1,12 +1,7 @@
 import os
 import warnings
-from swipe_extractor import (
-    extract_timestamps_from_file,
-    compute_timestamp_deltas,
-    extract_swipes_indices,
-    into_intervals,
-    create_swipes,
-)
+from features import Feature_Extractor
+from swipe_extractor import *
 
 
 def i_word_test():
@@ -77,5 +72,42 @@ def told_word_test():
     print("Diff:", delta)
 
 
+def swipe_coordinates():
+    swipe_counter = 1
+    timestamps, word = extract_timestamps_from_file(
+        os.path.join(os.getcwd(), "src", "py", "delay.log")
+    )
+    # print("Original:", timestamps)
+    delta = compute_timestamp_deltas(timestamps)
+    # print("Delta:", delta)
+    indices = extract_swipes_indices(delta)
+    # print("Indices:", indices)
+    intervals = into_intervals(indices)
+    print("Intervals:", intervals)
+    swipes = create_swipes(
+        timestamps,
+        word,
+        intervals,
+        os.path.join(os.getcwd(), "src", "py", "delay.log"),
+    )
+    for swipe in swipes:
+        # print(swipe.stringify())
+        times = swipe.swipe_timestamps()
+        bounds = [swipe.first_and_last_timestamp()]
+        for bound in bounds:
+            print("Swipe " + str(swipe_counter))
+            print("Bound " + str(bound))
+            lower = bound[0]
+            upper = bound[1]
+            # print(lower, upper)
+            print("Lower x coordinate", swipe.x_pos(lower))
+            print("Lower y coordinate", swipe.y_pos(lower))
+            print("Upper x coordinate", swipe.x_pos(upper))
+            print("Upper y coordinate", swipe.y_pos(upper))
+            swipe_counter += 1
+    for swipe in swipes:
+        print(Feature_Extractor.length(swipe))
+
+
 if __name__ == "__main__":
-    i_word_test()
+    swipe_coordinates()
