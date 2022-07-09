@@ -1,3 +1,4 @@
+from features import Feature_Extractor
 from swipe_extractor import (
     compute_timestamp_deltas,
     extract_timestamps_from_file,
@@ -10,6 +11,7 @@ from swipe_extractor import (
     write_to_file,
 )
 import os
+import pickle
 import warnings
 from tqdm import tqdm
 
@@ -21,11 +23,12 @@ if __name__ == "__main__":
         words = unique_words_from_file(os.path.join(os.getcwd(), "data", file))
         # print(words)
         for unique_word in words:
-            trajectories, word = extract_trajectories(
-                os.path.join(os.getcwd(), "data", file),
-                unique_word,
-            )
-            write_to_file(trajectories, unique_word)
+            # At this current moment we can reasonably assume that all the files have been generated
+            # trajectories, word = extract_trajectories(
+            #     os.path.join(os.getcwd(), "data", file),
+            #     unique_word,
+            # )
+            # write_to_file(trajectories, unique_word)
             timestamps, word = extract_timestamps_from_file(
                 os.path.join(os.getcwd(), "src", "py", "temp", unique_word + ".log")
             )
@@ -52,6 +55,11 @@ if __name__ == "__main__":
                 warnings.warn(
                     "No indices above the threshold, so swipes cannot be made"
                 )
+    for swipe in swipes:
+        print(swipe.get_key() + ": " + Feature_Extractor.length(swipe))
+    with open("data.pickle", "wb") as handle:
+        pickle.dump(swipes, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
     # timestamps, word = extract_timestamps_from_file(
     #     os.path.join(os.getcwd(), "src", "py", "delay.log")
     # )
