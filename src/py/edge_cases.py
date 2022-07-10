@@ -75,7 +75,7 @@ def told_word_test():
 def swipe_coordinates():
     swipe_counter = 1
     timestamps, word = extract_timestamps_from_file(
-        os.path.join(os.getcwd(), "src", "py", "delay.log")
+        os.path.join(os.getcwd(), "src", "py", "temp", "mary.log")
     )
     # print("Original:", timestamps)
     delta = compute_timestamp_deltas(timestamps)
@@ -89,7 +89,7 @@ def swipe_coordinates():
         timestamps,
         word,
         intervals,
-        os.path.join(os.getcwd(), "src", "py", "delay.log"),
+        os.path.join(os.getcwd(), "src", "py", "temp", "mary.log"),
     )
     for swipe in swipes:
         # print(swipe.stringify())
@@ -107,7 +107,7 @@ def swipe_coordinates():
             print("Upper y coordinate", swipe.y_pos(upper))
             swipe_counter += 1
     for swipe in swipes:
-        print(Feature_Extractor.length(swipe))
+        print(Feature_Extractor.extract_all_features(swipe))
 
 
 if __name__ == "__main__":

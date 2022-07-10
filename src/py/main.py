@@ -20,7 +20,7 @@ if __name__ == "__main__":
     swipeset = []
     onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
     for file in tqdm(onlyfiles):
-        print(file)
+        # print(file)
         words = unique_words_from_file(os.path.join(os.getcwd(), "data", file))
         # print(words)
         for unique_word in words:
@@ -60,7 +60,7 @@ if __name__ == "__main__":
     for swipes in swipeset:
         for swipe in swipes:
             print(swipe.get_key())
-            Feature_Extractor.extract_all_features(swipe)
+            print("Features:", Feature_Extractor.extract_all_features(swipe))
     with open("data.pickle", "wb") as handle:
         pickle.dump(swipes, handle, protocol=pickle.HIGHEST_PROTOCOL)
 

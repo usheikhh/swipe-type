@@ -144,7 +144,7 @@ def precheck_deltas(deltas: List[int]):
 
 
 def extract_swipes_indices(deltas: List[int]):
-    print("deltas: ", (deltas))
+    # print("deltas: ", (deltas))
     if precheck_deltas(deltas) == True:
         return None
     above = []
@@ -166,12 +166,14 @@ def into_intervals(indices: List[int]):
             interval = [0, indices[0]]
         intervals.append(interval)
         return intervals
-    starting_index = 0
-    for index in indices:
-        interval = [starting_index, index]
-        intervals.append(interval)
-        starting_index = index + 1
-    return intervals
+    try:
+        for i in range(len(indices)):
+            # FIXME: So let's say our indices are: [0, 22, 44], the code currently returns [0, 22], [22, 44]] when instead it should return [0, 22], [23, 44]]
+            s = [indices[i], indices[i + 1]]
+            intervals.append(s)
+        return intervals
+    except IndexError:
+        return intervals
 
 
 def create_swipes(timestamps: List[str], word: str, intervals, path: str):
