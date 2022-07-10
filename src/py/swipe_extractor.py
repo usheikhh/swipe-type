@@ -3,8 +3,20 @@ import os
 from typing import List
 from swipe import Backing_File, Swipe
 from pathlib import Path
+import matplotlib.pyplot as plt
 
 THRESHOLD = 30
+
+
+def plot_deltas(list_delta):
+    plt.plot(list_delta, color="magenta", marker="o", mfc="pink")  # plot the data
+
+    plt.xticks(range(0, len(list_delta) + 1, 1))  # set the tick frequency on x-axis
+
+    plt.ylabel("data")  # set the label for y axis
+    plt.xlabel("index")  # set the label for x-axis
+    plt.title("Plotting a list")  # set the title of the graph
+    plt.show()  # display the graph
 
 
 def grab_first():
@@ -132,7 +144,7 @@ def precheck_deltas(deltas: List[int]):
 
 
 def extract_swipes_indices(deltas: List[int]):
-    # print("Length of deltas: ", len(deltas))
+    print("deltas: ", (deltas))
     if precheck_deltas(deltas) == True:
         return None
     above = []

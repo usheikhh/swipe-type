@@ -132,3 +132,4 @@ data/
 src/js/node_modules
 src/js/package-lock.json
 *.png
+*.svg

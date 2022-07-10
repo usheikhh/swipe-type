@@ -79,9 +79,10 @@ def swipe_coordinates():
     )
     # print("Original:", timestamps)
     delta = compute_timestamp_deltas(timestamps)
+    plot_deltas(delta)
     # print("Delta:", delta)
     indices = extract_swipes_indices(delta)
-    # print("Indices:", indices)
+    print("Indices:", indices)
     intervals = into_intervals(indices)
     print("Intervals:", intervals)
     swipes = create_swipes(
