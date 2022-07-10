@@ -48,7 +48,15 @@ def unique_words_from_file(path: str):
     found = []
     for line in search_space:
         word = list(line.split(" "))[10]
-        if word != "me" and word != "vanke" and word != "told":
+        if (
+            word != "me"
+            and word != "vanke"
+            and word != "told"
+            and word != "mary"
+            and word != "pembina"
+            and word != "interactions"
+            and word != "haciendo"
+        ):
             found.append(word)
     return set(found)
 
@@ -119,7 +127,8 @@ def compute_timestamp_deltas(timestamps: List[int]):
         deltas = []
         for i in range(1, len(timestamps)):
             delta = int(timestamps[i]) - curr
-            deltas.append(delta)
+            if delta > 0:
+                deltas.append(delta)
             curr = int(timestamps[i])
         return deltas
     except ValueError:

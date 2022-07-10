@@ -80,7 +80,7 @@ def swipe_coordinates():
     # print("Original:", timestamps)
     delta = compute_timestamp_deltas(timestamps)
     plot_deltas(delta)
-    # print("Delta:", delta)
+    print("Delta:", delta)
     indices = extract_swipes_indices(delta)
     print("Indices:", indices)
     intervals = into_intervals(indices)
@@ -101,13 +101,13 @@ def swipe_coordinates():
             lower = bound[0]
             upper = bound[1]
             # print(lower, upper)
-            print("Lower x coordinate", swipe.x_pos(lower))
-            print("Lower y coordinate", swipe.y_pos(lower))
-            print("Upper x coordinate", swipe.x_pos(upper))
-            print("Upper y coordinate", swipe.y_pos(upper))
+            # print("Lower x coordinate", swipe.x_pos(lower))
+            # print("Lower y coordinate", swipe.y_pos(lower))
+            # print("Upper x coordinate", swipe.x_pos(upper))
+            # print("Upper y coordinate", swipe.y_pos(upper))
             swipe_counter += 1
-    for swipe in swipes:
-        print(Feature_Extractor.extract_all_features(swipe))
+    # for swipe in swipes:
+    #     print(Feature_Extractor.extract_all_features(swipe))
 
 
 if __name__ == "__main__":

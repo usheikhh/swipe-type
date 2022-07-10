@@ -31,7 +31,7 @@ if __name__ == "__main__":
             # )
             # write_to_file(trajectories, unique_word)
             timestamps, word = extract_timestamps_from_file(
-                os.path.join(os.getcwd(), "src", "py", "temp", unique_word + ".log")
+                os.path.join(os.getcwd(), "src", "py", unique_word + ".log")
             )
 
             # print("New:", timestamps)
@@ -48,19 +48,17 @@ if __name__ == "__main__":
                     timestamps,
                     word,
                     intervals,
-                    os.path.join(
-                        os.getcwd(), "src", "py", "temp", unique_word + ".log"
-                    ),
+                    os.path.join(os.getcwd(), "src", "py", unique_word + ".log"),
                 )
                 swipeset.append(swipes)
             elif indices is None:
                 warnings.warn(
                     "No indices above the threshold, so swipes cannot be made"
                 )
-    for swipes in swipeset:
+    for swipes in tqdm(swipeset):
         for swipe in swipes:
-            print(swipe.get_key())
-            print("Features:", Feature_Extractor.extract_all_features(swipe))
+            # print(swipe.get_key())
+            Feature_Extractor.extract_all_features(swipe)
     with open("data.pickle", "wb") as handle:
         pickle.dump(swipes, handle, protocol=pickle.HIGHEST_PROTOCOL)
 

@@ -13,13 +13,13 @@ class Feature_Extractor:
         y1 = swipe.y_pos(first_timestamp)
         x2 = swipe.x_pos(last_timestamp)
         y2 = swipe.y_pos(last_timestamp)
-        print("X1: ", x1, "Y1: ", y1, "X2: ", x2, "Y2: ", y2)
+        # print("X1: ", x1, "Y1: ", y1, "X2: ", x2, "Y2: ", y2)
         try:
             return float(abs(int(y2) - int(y1)) / abs(int(x2) - int(x1)))
         except ZeroDivisionError:
-            print("Calculating swipe length")
+            # print("Calculating swipe length")
             print("Key:", swipe.get_key())
-            print("Path:", swipe.get_backing_file().get_path())
+            # print("Path:", swipe.get_backing_file().get_path())
             return 0
 
     @staticmethod
