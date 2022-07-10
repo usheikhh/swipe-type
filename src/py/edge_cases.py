@@ -72,47 +72,9 @@ def told_word_test():
     print("Diff:", delta)
 
 
-def swipe_coordinates():
-    swipe_counter = 1
-    timestamps, word = extract_timestamps_from_file(
-        os.path.join(os.getcwd(), "src", "py", "temp", "mary.log")
-    )
-    # print("Original:", timestamps)
-    delta = compute_timestamp_deltas(timestamps)
-    plot_deltas(delta)
-    print("Delta:", delta)
-    indices = extract_swipes_indices(delta)
-    print("Indices:", indices)
-    intervals = into_intervals(indices)
-    print("Intervals:", intervals)
-    swipes = create_swipes(
-        timestamps,
-        word,
-        intervals,
-        os.path.join(os.getcwd(), "src", "py", "temp", "mary.log"),
-    )
-    for swipe in swipes:
-        # print(swipe.stringify())
-        times = swipe.swipe_timestamps()
-        bounds = [swipe.first_and_last_timestamp()]
-        for bound in bounds:
-            print("Swipe " + str(swipe_counter))
-            print("Bound " + str(bound))
-            lower = bound[0]
-            upper = bound[1]
-            # print(lower, upper)
-            # print("Lower x coordinate", swipe.x_pos(lower))
-            # print("Lower y coordinate", swipe.y_pos(lower))
-            # print("Upper x coordinate", swipe.x_pos(upper))
-            # print("Upper y coordinate", swipe.y_pos(upper))
-            swipe_counter += 1
-    # for swipe in swipes:
-    #     print(Feature_Extractor.extract_all_features(swipe))
-
-
 def zero_division_length_error():
     timestamps, word = extract_timestamps_from_file(
-        os.path.join(os.getcwd(), "src", "py", "frequently.log"), False
+        os.path.join(os.getcwd(), "src", "py", "temp", "mary.log"), False
     )
     delta = compute_timestamp_deltas(timestamps)
     print("Delta:", delta)
@@ -120,14 +82,24 @@ def zero_division_length_error():
     print("Indices:", indices)
     intervals = into_intervals(indices)
     print("Intervals:", intervals)
-    swipes = create_swipes(
+    swipes: List[Swipe] = create_swipes(
         timestamps,
         word,
         intervals,
         os.path.join(os.getcwd(), "src", "py", "temp", "mary.log"),
     )
     for swipe in swipes:
-        Feature_Extractor.length(swipe)
+        first, last = swipe.first_and_last_timestamp()
+        print(swipe.get_backing_file().lookup_row_by_timestamp(first))
+        # print(last in swipe.swipe_timestamps())
+        # print(first in ts, last in ts)
+        # ? Why can the row be found.... it's definitely in the file
+        # print(row)
+        print("First X-Position:", swipe.x_pos(first))
+        print("First Y-Position:", swipe.y_pos(first))
+        print("Last X-Position:", swipe.x_pos(last))
+        print("First Y-Position:", swipe.y_pos(last))
+        print(Feature_Extractor.length(swipe))
 
 
 if __name__ == "__main__":

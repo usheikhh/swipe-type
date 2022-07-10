@@ -13,7 +13,6 @@ class Backing_File:
         return self.path
 
     def lookup_row_by_timestamp(self, timestamp: str):
-        # f = open(self.backing_file.get_path(), "r")
         f = open(self.get_path(), "r")
         lines = f.readlines()
         for line in lines:
