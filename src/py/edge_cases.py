@@ -110,5 +110,25 @@ def swipe_coordinates():
     #     print(Feature_Extractor.extract_all_features(swipe))
 
 
+def zero_division_length_error():
+    timestamps, word = extract_timestamps_from_file(
+        os.path.join(os.getcwd(), "src", "py", "frequently.log"), False
+    )
+    delta = compute_timestamp_deltas(timestamps)
+    print("Delta:", delta)
+    indices = extract_swipes_indices(delta)
+    print("Indices:", indices)
+    intervals = into_intervals(indices)
+    print("Intervals:", intervals)
+    swipes = create_swipes(
+        timestamps,
+        word,
+        intervals,
+        os.path.join(os.getcwd(), "src", "py", "temp", "mary.log"),
+    )
+    for swipe in swipes:
+        Feature_Extractor.length(swipe)
+
+
 if __name__ == "__main__":
-    swipe_coordinates()
+    zero_division_length_error()
