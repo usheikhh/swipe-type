@@ -1,6 +1,7 @@
 import os
 import warnings
 from features import Feature_Extractor
+from algo import manhattan
 from swipe_extractor import *
 
 
@@ -72,10 +73,9 @@ def told_word_test():
     print("Diff:", delta)
 
 
-def zero_division_length_error():
-    timestamps, word = extract_timestamps_from_file(
-        os.path.join(os.getcwd(), "src", "py", "temp", "mary.log"), False
-    )
+def zero_division_length_error(path: str):
+    vectors = []
+    timestamps, word = extract_timestamps_from_file(path, False)
     delta = compute_timestamp_deltas(timestamps)
     print("Delta:", delta)
     indices = extract_swipes_indices(delta)
@@ -86,7 +86,7 @@ def zero_division_length_error():
         timestamps,
         word,
         intervals,
-        os.path.join(os.getcwd(), "src", "py", "temp", "mary.log"),
+        path,
     )
     for swipe in swipes:
         first, last = swipe.first_and_last_timestamp()
@@ -99,8 +99,24 @@ def zero_division_length_error():
         print("First Y-Position:", swipe.y_pos(first))
         print("Last X-Position:", swipe.x_pos(last))
         print("First Y-Position:", swipe.y_pos(last))
-        print(Feature_Extractor.length(swipe))
+        print(list(Feature_Extractor.extract_all_features(swipe).values()))
+        vectors.append(list(Feature_Extractor.extract_all_features(swipe).values()))
+    return vectors
+
+
+def distance_test(fv1, fv2):
+    return manhattan(fv1, fv2)
 
 
 if __name__ == "__main__":
-    zero_division_length_error()
+    total = 0
+    vector_set1 = zero_division_length_error(
+        os.path.join(os.getcwd(), "src", "py", "belt.log")
+    )
+    vector_set2 = zero_division_length_error(
+        os.path.join(os.getcwd(), "src", "py", "connect.log")
+    )
+    for fv in vector_set1:
+        for fv2 in vector_set2:
+            total += manhattan(fv, fv2)
+    print("Total:", total)

@@ -17,6 +17,7 @@ class Feature_Extractor:
         try:
             return float(abs(int(y2) - int(y1)) / abs(int(x2) - int(x1)))
         except ZeroDivisionError:
+            print("Error encountered when calculating length")
             # print("Calculating swipe length")
             print("Key:", swipe.get_key())
             # print("Path:", swipe.get_backing_file().get_path())
