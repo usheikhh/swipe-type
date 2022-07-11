@@ -109,14 +109,23 @@ def distance_test(fv1, fv2):
 
 
 if __name__ == "__main__":
-    total = 0
-    vector_set1 = zero_division_length_error(
+    paths = []
+    for file in os.listdir(os.path.join(os.getcwd(), "src", "py")):
+        if file.endswith(".log"):
+            path = os.path.join(os.getcwd(), "src", "py", file)
+            print(path)
+
+        total = 0
+        try:
+            vector_set1 = zero_division_length_error(
+                os.path.join(os.getcwd(), "src", "py", "edwards.log")
+            )
+        except TypeError:
+            print("Failed path: ", path)
+    vector_set2 = zero_division_length_error(
         os.path.join(os.getcwd(), "src", "py", "belt.log")
     )
-    vector_set2 = zero_division_length_error(
-        os.path.join(os.getcwd(), "src", "py", "connect.log")
-    )
-    for fv in vector_set1:
-        for fv2 in vector_set2:
-            total += scipy_manhattan(fv, fv2)
-    print("Total:", total)
+    # for fv in vector_set1:
+    #     for fv2 in vector_set2:
+    #         total += scipy_manhattan(fv, fv2)
+    # print("Total:", total)

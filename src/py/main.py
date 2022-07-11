@@ -55,6 +55,11 @@ if __name__ == "__main__":
                 warnings.warn(
                     "No indices above the threshold, so swipes cannot be made"
                 )
+        for swipes in swipeset:
+            for swipe in swipes:
+                # print(swipe.get_key())
+                Feature_Extractor.extract_all_features(swipe)
+
     # for swipes in tqdm(swipeset):
     #     for swipe in swipes:
     #         print(swipe.get_key())
