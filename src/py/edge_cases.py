@@ -118,14 +118,14 @@ if __name__ == "__main__":
         total = 0
         try:
             vector_set1 = zero_division_length_error(
-                os.path.join(os.getcwd(), "src", "py", "edwards.log")
+                os.path.join(os.getcwd(), "src", "py", "1jsbnruoavfdgt0getirt7ku58.log")
             )
         except TypeError:
             print("Failed path: ", path)
     vector_set2 = zero_division_length_error(
-        os.path.join(os.getcwd(), "src", "py", "belt.log")
+        os.path.join(os.getcwd(), "src", "py", "1kf79g0l0ub6li7fisvf2rench.log")
     )
-    # for fv in vector_set1:
-    #     for fv2 in vector_set2:
-    #         total += scipy_manhattan(fv, fv2)
-    # print("Total:", total)
+    for fv in vector_set1:
+         for fv2 in vector_set2:
+             total += scipy_manhattan(fv, fv2)
+    print("Total:", total)

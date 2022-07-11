@@ -1,3 +1,4 @@
+from turtle import distance
 from scipy.spatial.distance import cityblock
 from math import sqrt
 
