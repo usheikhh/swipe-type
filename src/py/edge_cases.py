@@ -1,7 +1,7 @@
 import os
 import warnings
 from features import Feature_Extractor
-from algo import manhattan
+from algo import manhattan, scipy_manhattan
 from swipe_extractor import *
 
 
@@ -118,5 +118,5 @@ if __name__ == "__main__":
     )
     for fv in vector_set1:
         for fv2 in vector_set2:
-            total += manhattan(fv, fv2)
+            total += scipy_manhattan(fv, fv2)
     print("Total:", total)
