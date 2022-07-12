@@ -5,6 +5,10 @@ from algo import manhattan, scipy_manhattan
 from swipe_extractor import *
 
 
+def unique_word_test(filename: str):
+    return unique_words_from_file(os.path.join(os.getcwd(), "data", filename))
+
+
 def i_word_test():
     # TODO: This code represents an edge case we have to consider when creating intervals.
     # Since there are only 2 rows in the file When extracting the indices it is technically correct
@@ -115,17 +119,14 @@ if __name__ == "__main__":
             path = os.path.join(os.getcwd(), "src", "py", file)
             print(path)
 
-        total = 0
-        try:
-            vector_set1 = zero_division_length_error(
-                os.path.join(os.getcwd(), "src", "py", "1jsbnruoavfdgt0getirt7ku58.log")
-            )
-        except TypeError:
-            print("Failed path: ", path)
+    total = 0
+    vector_set1 = zero_division_length_error(
+        os.path.join(os.getcwd(), "src", "py", "ill.log")
+    )
     vector_set2 = zero_division_length_error(
         os.path.join(os.getcwd(), "src", "py", "1kf79g0l0ub6li7fisvf2rench.log")
     )
     for fv in vector_set1:
-         for fv2 in vector_set2:
-             total += scipy_manhattan(fv, fv2)
+        for fv2 in vector_set2:
+            total += scipy_manhattan(fv, fv2)
     print("Total:", total)
