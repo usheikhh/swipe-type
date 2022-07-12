@@ -38,17 +38,26 @@ class Feature_Extractor:
 
     @staticmethod
     def calculate_velocity(swipe: Swipe):
-        # TODO: I think this is right, not sure though
-        # FIXME: There is a divide by zero here
-        displacement = Feature_Extractor.length(swipe)
-        delta_t = Feature_Extractor.time_delta(swipe)
-        try:
-            return float(displacement / delta_t)
-        except ZeroDivisionError:
-            print("Calculating swipe velocity")
-            print("Key:", swipe.get_key())
-            print("Path:", swipe.get_backing_file().get_path())
-            return 0
+        times = swipe.swipe_timestamps()
+        print("Times: ", times)
+        x_coords = []
+        y_coords = []
+        for time in times:
+            x_coords.append(int(swipe.x_pos(time)))
+            y_coords.append(int(swipe.y_pos(time)))
+        pairwise_velocities = []
+        for i in range(len(x_coords) - 2):
+            x1 = x_coords[i]
+            x2 = x_coords[i + 1]
+            y1 = y_coords[i]
+            y2 = y_coords[i + 1]
+            t1 = int(times[i])
+            t2 = int(times[i + 1])
+            delta_y = y2 - y1
+            delta_x = x2 - x1
+            delta_t = t2 - t1
+            pairwise_velocities.append(float(delta_y / delta_x / delta_t))
+        return pairwise_velocities
 
     @staticmethod
     def calculate_acceleration(initial_swipe: Swipe):
