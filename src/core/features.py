@@ -1,3 +1,4 @@
+from cmath import sqrt
 from swipe import Swipe
 import numpy as np
 
@@ -28,7 +29,7 @@ class Feature_Extractor:
             x2 = x_coords[i + 1]
             y1 = y_coords[i]
             y2 = y_coords[i + 1]
-            sum += abs(float((y2 - y1) / (x2 - x1)))
+            sum += (pow(pow((y2-y1),2) + pow((x2-x1),2),0.5))
         return sum
 
     @staticmethod

@@ -93,7 +93,7 @@ def zero_division_length_error(path: str):
         path,
     )
     for swipe in swipes:
-        print(Feature_Extractor.calculate_velocity(swipe))
+        print(Feature_Extractor.length(swipe))
     return vectors
 
 
@@ -104,5 +104,5 @@ def distance_test(fv1, fv2):
 if __name__ == "__main__":
     total = 0
     vector_set1 = zero_division_length_error(
-        os.path.join(os.getcwd(), "src", "core", "temp", "plane.log")
+        os.path.join(os.getcwd(), "src", "core", "temp", "delay.log")
     )
