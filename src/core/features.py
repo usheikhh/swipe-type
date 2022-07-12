@@ -1,4 +1,3 @@
-from scipy.stats import linregress
 from swipe import Swipe
 import numpy as np
 
@@ -23,7 +22,14 @@ class Feature_Extractor:
             y_coords.append(int(swipe.y_pos(time)))
         # print("X positions: ", (x_coords))
         # print("Y positions: ", (y_coords))
-        return linregress(x_coords, y_coords).slope
+        sum = 0
+        for i in range(0, len(x_coords) - 1):
+            x1 = x_coords[i]
+            x2 = x_coords[i + 1]
+            y1 = y_coords[i]
+            y2 = y_coords[i + 1]
+            sum += abs(float((y2 - y1) / (x2 - x1)))
+        return sum
 
     @staticmethod
     def time_delta(initial_swipe: Swipe):
