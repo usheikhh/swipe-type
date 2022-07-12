@@ -93,18 +93,7 @@ def zero_division_length_error(path: str):
         path,
     )
     for swipe in swipes:
-        first, last = swipe.first_and_last_timestamp()
-        print(swipe.get_backing_file().lookup_row_by_timestamp(first))
-        # print(last in swipe.swipe_timestamps())
-        # print(first in ts, last in ts)
-        # ? Why can the row be found.... it's definitely in the file
-        # print(row)
-        print("First X-Position:", swipe.x_pos(first))
-        print("First Y-Position:", swipe.y_pos(first))
-        print("Last X-Position:", swipe.x_pos(last))
-        print("First Y-Position:", swipe.y_pos(last))
-        print(list(Feature_Extractor.extract_all_features(swipe).values()))
-        vectors.append(list(Feature_Extractor.extract_all_features(swipe).values()))
+        Feature_Extractor.length(swipe)
     return vectors
 
 
@@ -113,20 +102,7 @@ def distance_test(fv1, fv2):
 
 
 if __name__ == "__main__":
-    paths = []
-    for file in os.listdir(os.path.join(os.getcwd(), "src", "py")):
-        if file.endswith(".log"):
-            path = os.path.join(os.getcwd(), "src", "py", file)
-            print(path)
-
     total = 0
     vector_set1 = zero_division_length_error(
-        os.path.join(os.getcwd(), "src", "py", "ill.log")
+        os.path.join(os.getcwd(), "src", "core", "temp", "delay.log")
     )
-    vector_set2 = zero_division_length_error(
-        os.path.join(os.getcwd(), "src", "py", "1kf79g0l0ub6li7fisvf2rench.log")
-    )
-    for fv in vector_set1:
-        for fv2 in vector_set2:
-            total += scipy_manhattan(fv, fv2)
-    print("Total:", total)

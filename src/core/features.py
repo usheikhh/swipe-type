@@ -1,4 +1,13 @@
 from swipe import Swipe
+import numpy as np
+
+
+def split_into_sized_chunks(lst, size: int):
+    return np.array_split(lst, size)
+
+
+def slope(x_list, y_list):
+    pass
 
 
 class Feature_Extractor:
@@ -8,56 +17,41 @@ class Feature_Extractor:
     @staticmethod
     def length(swipe: Swipe):
         #! FIXME: We need to figure out which file is giving us a divide by zero error and why
-        first_timestamp, last_timestamp = swipe.first_and_last_timestamp()
-        x1 = swipe.x_pos(first_timestamp)
-        y1 = swipe.y_pos(first_timestamp)
-        x2 = swipe.x_pos(last_timestamp)
-        y2 = swipe.y_pos(last_timestamp)
+        times = swipe.swipe_timestamps()
+        print("Times: ", times)
+        x_coords = []
+        y_coords = []
+        for time in times:
+            x_coords.append(swipe.x_pos(time))
+            y_coords.append(swipe.y_pos(time))
+        print("X positions: ", len(x_coords))
+        print("Y positions: ", len(y_coords))
+
         # print("X1: ", x1, "Y1: ", y1, "X2: ", x2, "Y2: ", y2)
-        try:
-            return float(abs(int(y2) - int(y1)) / abs(int(x2) - int(x1)))
-        except ZeroDivisionError:
-            print("Error encountered when calculating length")
-            # print("Calculating swipe length")
-            print("Key:", swipe.get_key())
-            # print("Path:", swipe.get_backing_file().get_path())
-            return 0
+        # try:
+        #     return float(abs(int(y2) - int(y1)) / abs(int(x2) - int(x1)))
+        # except ZeroDivisionError:
+        #     print("Error encountered when calculating length")
+        #     # print("Calculating swipe length")
+        #     print("Key:", swipe.get_key())
+        #     # print("Path:", swipe.get_backing_file().get_path())
+        #     return 0
 
     @staticmethod
     def length_between_swipes(initial_swipe: Swipe, other_swipe: Swipe):
-        # XXX: Condense: employ a similar approach to length() with only a single swipe... remember that the returned row is one giant string not a list of smaller strings
-        first_timestamp = initial_swipe.first_timestamp()
-        ending_timestamp = other_swipe.last_timestamp()
-        first_row = initial_swipe.get_backing_file().lookup_row_by_timestamp(
-            first_timestamp
-        )
-
-        second_row = other_swipe.get_backing_file().lookup_row_by_timestamp(
-            ending_timestamp
-        )
-
-        x1 = int(first_row[5])
-        y1 = int(first_row[6])
-        x2 = int(second_row[5])
-        y2 = int(second_row[6])
-        return float((y2 - y1) / (x2 - x1))
+        pass
 
     @staticmethod
     def time_delta_between_swipes(swipe: Swipe, other_swipe: Swipe):
-        return int(swipe.first_timestamp()) - int(other_swipe.second_timestamp())
+        pass
 
     @staticmethod
     def velocity_between_swipes(initial_swipe: Swipe, other: Swipe):
-        # TODO: I think this is right, not sure though
-        displacement = Feature_Extractor.length_between_swipes(initial_swipe, other)
-        delta_t = Feature_Extractor.time_delta_between_swipes(initial_swipe, other)
-        return float(displacement / delta_t)
+        pass
 
     @staticmethod
     def acceleration_between_swipes(initial_swipe: Swipe, other: Swipe):
-        velocity = Feature_Extractor.calculate_velocity(initial_swipe, other)
-        time = Feature_Extractor.time_delta(initial_swipe, other)
-        return float(velocity / time)
+        pass
 
     @staticmethod
     def time_delta(initial_swipe: Swipe):
