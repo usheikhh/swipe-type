@@ -26,18 +26,6 @@ class Feature_Extractor:
         return linregress(x_coords, y_coords).slope
 
     @staticmethod
-    def time_delta_between_swipes(swipe: Swipe, other_swipe: Swipe):
-        pass
-
-    @staticmethod
-    def velocity_between_swipes(initial_swipe: Swipe, other: Swipe):
-        pass
-
-    @staticmethod
-    def acceleration_between_swipes(initial_swipe: Swipe, other: Swipe):
-        pass
-
-    @staticmethod
     def time_delta(initial_swipe: Swipe):
         first_timestamp, last_timestamp = initial_swipe.first_and_last_timestamp()
         return int(last_timestamp) - int(first_timestamp)
