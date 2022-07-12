@@ -1,13 +1,10 @@
+from scipy.stats import linregress
 from swipe import Swipe
 import numpy as np
 
 
 def split_into_sized_chunks(lst, size: int):
     return np.array_split(lst, size)
-
-
-def slope(x_list, y_list):
-    pass
 
 
 class Feature_Extractor:
@@ -22,24 +19,11 @@ class Feature_Extractor:
         x_coords = []
         y_coords = []
         for time in times:
-            x_coords.append(swipe.x_pos(time))
-            y_coords.append(swipe.y_pos(time))
-        print("X positions: ", len(x_coords))
-        print("Y positions: ", len(y_coords))
-
-        # print("X1: ", x1, "Y1: ", y1, "X2: ", x2, "Y2: ", y2)
-        # try:
-        #     return float(abs(int(y2) - int(y1)) / abs(int(x2) - int(x1)))
-        # except ZeroDivisionError:
-        #     print("Error encountered when calculating length")
-        #     # print("Calculating swipe length")
-        #     print("Key:", swipe.get_key())
-        #     # print("Path:", swipe.get_backing_file().get_path())
-        #     return 0
-
-    @staticmethod
-    def length_between_swipes(initial_swipe: Swipe, other_swipe: Swipe):
-        pass
+            x_coords.append(int(swipe.x_pos(time)))
+            y_coords.append(int(swipe.y_pos(time)))
+        # print("X positions: ", (x_coords))
+        # print("Y positions: ", (y_coords))
+        return linregress(x_coords, y_coords).slope
 
     @staticmethod
     def time_delta_between_swipes(swipe: Swipe, other_swipe: Swipe):

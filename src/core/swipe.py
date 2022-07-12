@@ -32,11 +32,17 @@ class Swipe:
     def x_pos(self, timestamp: str):
         row = self.get_backing_file().lookup_row_by_timestamp(timestamp)
         row = row.split(" ")
+        # FIX: I dont know if this is a bug with
+        # how we are sending the swipe data to the swipe object or if we accidentally
+        # shave off a row somewhere but i looks like when printing out the rows in the file
+        # the last row is missing, or at least it is for delay.log
+        print("Found row:", row)
         return row[5]
 
     def y_pos(self, timestamp: str):
         row = self.get_backing_file().lookup_row_by_timestamp(timestamp)
         row = row.split(" ")
+        print("Found row:", row)
         return row[6]
 
     def sentence(self, timestamp: str):

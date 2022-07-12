@@ -93,7 +93,7 @@ def zero_division_length_error(path: str):
         path,
     )
     for swipe in swipes:
-        Feature_Extractor.length(swipe)
+        print(Feature_Extractor.length(swipe))
     return vectors
 
 
