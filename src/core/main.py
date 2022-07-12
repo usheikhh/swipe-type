@@ -26,13 +26,13 @@ if __name__ == "__main__":
         for unique_word in words:
             # At this current moment we can reasonably assume that all the files have been generated
             trajectories, word = extract_trajectories(
-                 os.path.join(os.getcwd(), "data", file),
+                os.path.join(os.getcwd(), "data", file),
                 unique_word,
-             )
+            )
             write_to_file(trajectories, unique_word)
             timestamps, word = extract_timestamps_from_file(
-                os.path.join(os.getcwd(), "src", "py", unique_word + ".log")
-            )  
+                os.path.join(os.getcwd(), "src", "core", "temp", unique_word + ".log")
+            )
 
             # print("New:", timestamps)
             # print(unique_word)
@@ -48,7 +48,9 @@ if __name__ == "__main__":
                     timestamps,
                     word,
                     intervals,
-                    os.path.join(os.getcwd(), "src", "py", unique_word + ".log"),
+                    os.path.join(
+                        os.getcwd(), "src", "core", "temp", unique_word + ".log"
+                    ),
                 )
                 swipeset.append(swipes)
             elif indices is None:

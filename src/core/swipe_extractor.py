@@ -87,7 +87,7 @@ def extract_trajectories(path: str, key: str):
 
 def write_to_file(data, key):
     # data_file = Path(os.path.join(os.getcwd(), "src", "py", "temp", key + ".log"))
-    data_file = Path(os.path.join(os.getcwd(), "src", "py", key + ".log"))
+    data_file = Path(os.path.join(os.getcwd(), "src", "core", "temp", key + ".log"))
     data_file.touch(exist_ok=True)
     f = open(data_file, "w+")
     for line in data:
