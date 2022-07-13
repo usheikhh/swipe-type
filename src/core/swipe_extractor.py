@@ -106,7 +106,7 @@ def extract_timestamps_from_file(path: str, header_present=False):
         timestamps.append((res))
     if header_present == True:
         return (timestamps[1:], word)
-    if header_present == False:
+    elif header_present == False:
         return (timestamps, word)
 
 
@@ -170,13 +170,13 @@ def into_intervals(indices: List[int]):
         raise ValueError("No indices provided")
     if len(indices) == 1:
         if indices[0] == 0:
-            interval = [0, indices[0] + len(indices)]
+            interval = [0, indices[0] + len(indices) + 1]
         else:
-            interval = [0, indices[0]]
+            interval = [0, indices[0] + 1]
         intervals.append(interval)
         return intervals
     try:
-        for i in range(len(indices)):
+        for i in range(0, len(indices)):
             # FIXME: So let's say our indices are: [0, 22, 44], the code currently returns [0, 22], [22, 44]] when instead it should return [0, 22], [23, 44]]
             s = [indices[i], indices[i + 1]]
             intervals.append(s)
@@ -186,9 +186,11 @@ def into_intervals(indices: List[int]):
 
 
 def create_swipes(timestamps: List[str], word: str, intervals, path: str):
+    # print(intervals)
     ranges = []
     for interval in intervals:
         ranges.append(list(range(interval[0], interval[1] + 1)))
+    print(ranges)
     # print(ranges)
     swipe_list = []
     times = []

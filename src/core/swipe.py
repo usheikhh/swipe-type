@@ -36,13 +36,13 @@ class Swipe:
         # how we are sending the swipe data to the swipe object or if we accidentally
         # shave off a row somewhere but i looks like when printing out the rows in the file
         # the last row is missing, or at least it is for delay.log
-        print("Found row:", row)
+        # print("Found row:", row)
         return row[5]
 
     def y_pos(self, timestamp: str):
         row = self.get_backing_file().lookup_row_by_timestamp(timestamp)
         row = row.split(" ")
-        print("Found row:", row)
+        # print("Found row:", row)
         return row[6]
 
     def sentence(self, timestamp: str):
@@ -80,6 +80,8 @@ class Swipe:
         return row[10]
 
     def swipe_timestamps(self):
+        # print(self.swipe_data)
+        # print("Found", len(self.swipe_data), "timestamps")
         return self.swipe_data
 
     def timestamp_at(self, index: int):
