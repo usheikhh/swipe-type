@@ -7,6 +7,26 @@ def split_into_sized_chunks(lst, size: int):
     return np.array_split(lst, size)
 
 
+def pairwise_length_vector(swipe: Swipe):
+    length_vector = []
+    times = swipe.swipe_timestamps()
+    print("Times: ", times)
+    x_coords = []
+    y_coords = []
+    for time in times:
+        x_coords.append(int(swipe.x_pos(time)))
+        y_coords.append(int(swipe.y_pos(time)))
+    # print("X positions: ", (x_coords))
+    # print("Y positions: ", (y_coords))
+    for i in range(0, len(x_coords) - 1):
+        x1 = x_coords[i]
+        x2 = x_coords[i + 1]
+        y1 = y_coords[i]
+        y2 = y_coords[i + 1]
+        length_vector.append(pow(pow((y2 - y1), 2) + pow((x2 - x1), 2), 0.5))
+    return length_vector
+
+
 class Feature_Extractor:
     def __init__(self):
         pass
@@ -14,23 +34,8 @@ class Feature_Extractor:
     @staticmethod
     def length(swipe: Swipe):
         #! FIXME: We need to figure out which file is giving us a divide by zero error and why
-        times = swipe.swipe_timestamps()
-        print("Times: ", times)
-        x_coords = []
-        y_coords = []
-        for time in times:
-            x_coords.append(int(swipe.x_pos(time)))
-            y_coords.append(int(swipe.y_pos(time)))
-        # print("X positions: ", (x_coords))
-        # print("Y positions: ", (y_coords))
-        sum = 0
-        for i in range(0, len(x_coords) - 1):
-            x1 = x_coords[i]
-            x2 = x_coords[i + 1]
-            y1 = y_coords[i]
-            y2 = y_coords[i + 1]
-            sum += (pow(pow((y2-y1),2) + pow((x2-x1),2),0.5))
-        return sum
+        pairwise_lengths = pairwise_length_vector(swipe)
+        return sum(pairwise_lengths)
 
     @staticmethod
     def time_delta(initial_swipe: Swipe):
