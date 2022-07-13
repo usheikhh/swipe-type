@@ -1,6 +1,6 @@
-from cmath import sqrt
 from swipe import Swipe
 import numpy as np
+import math
 
 
 def split_into_sized_chunks(lst, size: int):
@@ -111,17 +111,25 @@ class Feature_Extractor:
         )
 
     @staticmethod
-    def percentile_velocity(initial_swipe: Swipe, percentile: float):
+    def percentile_velocity(initial_swipe: Swipe, percentile: float = 0.2):
         if percentile >= 1.0 or percentile <= 0.0:
             raise ValueError("Percentile should be between 0 and 1 non-inclusive")
-        velocity = Feature_Extractor.calculate_velocity(initial_swipe)
-        return float(velocity * percentile)
+        velocity_vector = pairwise_velocity_vector(initial_swipe)
+        row_count = math.floor(len(velocity_vector) * percentile)
+        return sum(velocity_vector[0:row_count])
 
     @staticmethod
     def extract_all_features(swipe: Swipe):
         feature_values = {}
         feature_values["length"] = Feature_Extractor.length(swipe)
-        feature_values["velocity"] = Feature_Extractor.calculate_velocity(swipe)
-        feature_values["acceleration"] = Feature_Extractor.calculate_acceleration(swipe)
-        feature_values["percentile"] = Feature_Extractor.percentile_velocity(swipe, 0.3)
+        feature_values["Velocity"] = Feature_Extractor.calculate_velocity(swipe)
+        feature_values[
+            "Pairwise acceleration"
+        ] = Feature_Extractor.calculate_pairwise_acceleration(swipe)
+        feature_values[
+            "Average Pairwise acceleration"
+        ] = Feature_Extractor.calculate_average_pairwise_acceleration(swipe)
+        feature_values["Percentile Velocity"] = Feature_Extractor.percentile_velocity(
+            swipe
+        )
         return feature_values

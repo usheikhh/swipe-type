@@ -93,23 +93,7 @@ def zero_division_length_error(path: str):
         path,
     )
     for swipe in swipes:
-        print("Swipe Length", Feature_Extractor.length(swipe))
-        print("Pairwise velocity vector", pairwise_velocity_vector(swipe))
-        print("Swipe velocity", Feature_Extractor.calculate_velocity(swipe))
-        print(
-            "Average Swipe velocity",
-            Feature_Extractor.calculate_average_velocity(swipe),
-        )
-        print("Pairwise acceleration vector", pairwise_acceleration_vector(swipe))
-        print(
-            "Average Pairwise acceleration",
-            Feature_Extractor.calculate_average_pairwise_acceleration(swipe),
-        )
-        print(
-            "Pairwise Swipe acceleration",
-            Feature_Extractor.calculate_pairwise_acceleration(swipe),
-        )
-
+        print(Feature_Extractor.extract_all_features(swipe))
     return vectors
 
 
