@@ -40,6 +40,19 @@ def pairwise_velocity_vector(swipe: Swipe):
     return velocities
 
 
+def pairwise_acceleration_vector(swipe: Swipe):
+    acceleration_vector = []
+    velocity_vector = pairwise_velocity_vector(swipe)
+    time_delta_vector = Feature_Extractor.time_delta(swipe)
+    assert len(velocity_vector) == len(
+        time_delta_vector
+    ), "Velocities and time deltas should be the same length"
+
+    for i in range(0, len(velocity_vector)):
+        acceleration_vector.append(float(velocity_vector[i]) / time_delta_vector[i])
+    return acceleration_vector
+
+
 class Feature_Extractor:
     def __init__(self):
         pass
@@ -86,11 +99,16 @@ class Feature_Extractor:
         )
 
     @staticmethod
-    def calculate_acceleration(initial_swipe: Swipe):
-        velocity = Feature_Extractor.calculate_velocity(initial_swipe)
-        time = Feature_Extractor.time_delta(initial_swipe)
+    def calculate_pairwise_acceleration(swipe: Swipe):
+        return sum(pairwise_acceleration_vector(swipe))
 
-        return float(velocity / time)
+    @staticmethod
+    def calculate_average_pairwise_acceleration(swipe: Swipe):
+        # This is equivalent to what we refer to as total swipe acceleration in the week 7 slides
+        return float(
+            sum(pairwise_acceleration_vector(swipe))
+            / len(pairwise_acceleration_vector(swipe))
+        )
 
     @staticmethod
     def percentile_velocity(initial_swipe: Swipe, percentile: float):
