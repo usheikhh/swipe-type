@@ -93,7 +93,9 @@ def zero_division_length_error(path: str):
         path,
     )
     for swipe in swipes:
-        print(Feature_Extractor.length(swipe))
+        print(Feature_Extractor.time_delta(swipe))
+        print("Swipe length",Feature_Extractor.length(swipe))
+
     return vectors
 
 
@@ -106,3 +108,5 @@ if __name__ == "__main__":
     vector_set1 = zero_division_length_error(
         os.path.join(os.getcwd(), "src", "core", "temp", "delay.log")
     )
+
+

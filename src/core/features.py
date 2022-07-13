@@ -7,7 +7,7 @@ def split_into_sized_chunks(lst, size: int):
     return np.array_split(lst, size)
 
 
-def pairwise_length_vector(swipe: Swipe):
+def pairwise_length_vector(swipe: Swipe): #This function creates an array of the length of from point to point 
     length_vector = []
     times = swipe.swipe_timestamps()
     print("Times: ", times)
@@ -38,32 +38,37 @@ class Feature_Extractor:
         return sum(pairwise_lengths)
 
     @staticmethod
-    def time_delta(initial_swipe: Swipe):
-        first_timestamp, last_timestamp = initial_swipe.first_and_last_timestamp()
-        return int(last_timestamp) - int(first_timestamp)
+    def time_delta(swipe: Swipe):
+        timestamps = swipe.swipe_timestamps()
+        try:
+        # print(timestamps)
+            curr = int(timestamps[0])
+        # print("curr", curr)
+            deltas = []
+            for i in range(1, len(timestamps)):
+                delta = int(timestamps[i]) - curr
+                if delta > 0:
+                    deltas.append(delta)
+                curr = int(timestamps[i])
+            return deltas
+        except ValueError:
+            # print(timestamps)
+            curr = int(timestamps[1])
+            print("curr", curr)
+            deltas = []
+            for i in range(2, len(timestamps)):
+                delta = int(timestamps[i]) - curr
+                deltas.append(delta)
+                curr = int(timestamps[i])
+            return deltas
+
+
 
     @staticmethod
     def calculate_velocity(swipe: Swipe):
-        times = swipe.swipe_timestamps()
-        print("Times: ", times)
-        x_coords = []
-        y_coords = []
-        for time in times:
-            x_coords.append(int(swipe.x_pos(time)))
-            y_coords.append(int(swipe.y_pos(time)))
-        pairwise_velocities = []
-        for i in range(len(x_coords) - 2):
-            x1 = x_coords[i]
-            x2 = x_coords[i + 1]
-            y1 = y_coords[i]
-            y2 = y_coords[i + 1]
-            t1 = int(times[i])
-            t2 = int(times[i + 1])
-            delta_y = y2 - y1
-            delta_x = x2 - x1
-            delta_t = t2 - t1
-            pairwise_velocities.append(float(delta_y / delta_x / delta_t))
-        return pairwise_velocities
+        length = pairwise_length_vector(swipe)
+        velocities = []
+        
 
     @staticmethod
     def calculate_acceleration(initial_swipe: Swipe):
