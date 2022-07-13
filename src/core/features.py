@@ -7,10 +7,11 @@ def split_into_sized_chunks(lst, size: int):
     return np.array_split(lst, size)
 
 
-def pairwise_length_vector(swipe: Swipe): #This function creates an array of the length of from point to point 
+# This function creates an array of the length of from point to point
+def pairwise_length_vector(swipe: Swipe):
     length_vector = []
     times = swipe.swipe_timestamps()
-    print("Times: ", times)
+    # print("Times: ", times)
     x_coords = []
     y_coords = []
     for time in times:
@@ -27,6 +28,18 @@ def pairwise_length_vector(swipe: Swipe): #This function creates an array of the
     return length_vector
 
 
+def pairwise_velocity_vector(swipe: Swipe):
+    length_vector = pairwise_length_vector(swipe)
+    delta_vector = Feature_Extractor.time_delta(swipe)
+    assert len(length_vector) == len(
+        delta_vector
+    ), "Pairwise length and pairwise delta vectors are not the same length"
+    velocities = []
+    for i in range(0, len(length_vector)):
+        velocities.append(float(length_vector[i]) / int(delta_vector[i]))
+    return velocities
+
+
 class Feature_Extractor:
     def __init__(self):
         pass
@@ -41,9 +54,9 @@ class Feature_Extractor:
     def time_delta(swipe: Swipe):
         timestamps = swipe.swipe_timestamps()
         try:
-        # print(timestamps)
+            # print(timestamps)
             curr = int(timestamps[0])
-        # print("curr", curr)
+            # print("curr", curr)
             deltas = []
             for i in range(1, len(timestamps)):
                 delta = int(timestamps[i]) - curr
@@ -62,13 +75,15 @@ class Feature_Extractor:
                 curr = int(timestamps[i])
             return deltas
 
-
-
     @staticmethod
     def calculate_velocity(swipe: Swipe):
-        length = pairwise_length_vector(swipe)
-        velocities = []
-        
+        return sum(pairwise_velocity_vector(swipe))
+
+    @staticmethod
+    def calculate_average_velocity(swipe: Swipe):
+        return float(
+            sum(pairwise_velocity_vector(swipe)) / len(pairwise_velocity_vector(swipe))
+        )
 
     @staticmethod
     def calculate_acceleration(initial_swipe: Swipe):

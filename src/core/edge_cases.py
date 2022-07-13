@@ -1,6 +1,6 @@
 import os
 import warnings
-from features import Feature_Extractor
+from features import *
 from algo import manhattan, scipy_manhattan
 from swipe_extractor import *
 
@@ -93,8 +93,13 @@ def zero_division_length_error(path: str):
         path,
     )
     for swipe in swipes:
-        print(Feature_Extractor.time_delta(swipe))
-        print("Swipe length",Feature_Extractor.length(swipe))
+        print("Swipe Length", Feature_Extractor.length(swipe))
+        print("Pairwise velocity vector", pairwise_velocity_vector(swipe))
+        print("Swipe velocity", Feature_Extractor.calculate_velocity(swipe))
+        print(
+            "Average Swipe velocity",
+            Feature_Extractor.calculate_average_velocity(swipe),
+        )
 
     return vectors
 
@@ -108,5 +113,3 @@ if __name__ == "__main__":
     vector_set1 = zero_division_length_error(
         os.path.join(os.getcwd(), "src", "core", "temp", "delay.log")
     )
-
-
