@@ -1,8 +1,9 @@
 import os
 import warnings
-from core.features import *
-from core.algo import manhattan, scipy_manhattan
-from core.swipe_extractor import *
+from features import *
+from algo import manhattan, scipy_manhattan
+from swipe_extractor import *
+from tqdm import tqdm
 
 
 def unique_word_test(filename: str):
@@ -93,6 +94,7 @@ def zero_division_length_error(path: str):
         path,
     )
     for swipe in swipes:
+        print(swipe.get_key())
         print(Feature_Extractor.extract_all_features(swipe))
     return vectors
 
@@ -101,8 +103,41 @@ def distance_test(fv1, fv2):
     return manhattan(fv1, fv2)
 
 
+def full_run():
+    p = os.path.join(os.getcwd(), "src", "core", "temp")
+    onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
+    swipeset = []
+    for file in tqdm(onlyfiles):
+        timestamps, word = extract_timestamps_from_file(
+            os.path.join(os.getcwd(), "src", "core", "temp", file)
+        )
+        delta = compute_timestamp_deltas(timestamps)
+        indices = extract_swipes_indices(delta)
+        if indices is not None:
+            # print(indices)
+            intervals = into_intervals(indices)
+            # print(intervals)
+            # input()
+            swipes = create_swipes(
+                timestamps,
+                word,
+                intervals,
+                os.path.join(os.getcwd(), "src", "core", "temp", file),
+            )
+            swipeset.append(swipes)
+        elif indices is None:
+            warnings.warn("No indices above the threshold, so swipes cannot be made")
+    for swipes in tqdm(swipeset):
+        for swipe in swipes:
+            print(swipe.get_key())
+            # print(Feature_Extractor.extract_all_features(swipe))
+
+
 if __name__ == "__main__":
-    total = 0
-    vector_set1 = zero_division_length_error(
-        os.path.join(os.getcwd(), "src", "core", "temp", "delay.log")
-    )
+    p = os.path.join(os.getcwd(), "src", "core", "temp")
+
+    onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
+    for file in tqdm(onlyfiles):
+        zero_division_length_error(
+            os.path.join(os.getcwd(), "src", "core", "temp", file)
+        )
