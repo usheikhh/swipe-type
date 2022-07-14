@@ -4,11 +4,6 @@
 
 You need Python >= 3 and NodeJS >= 10 interpreters.
 
-### Table of Contents
-
-**[Javascript](#js)**<br>
-**[Python](#py)**<br>
-
 ## Javascript
 
 ## Prerequisites
