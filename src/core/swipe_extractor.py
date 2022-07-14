@@ -5,7 +5,7 @@ from swipe import Backing_File, Swipe
 from pathlib import Path
 import matplotlib.pyplot as plt
 
-THRESHOLD = 30
+THRESHOLD = 25
 
 
 def plot_deltas(list_delta):
