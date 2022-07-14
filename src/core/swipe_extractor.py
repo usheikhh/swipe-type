@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 from typing import List
-from core.swipe import Backing_File, Swipe
+from swipe import Backing_File, Swipe
 from pathlib import Path
 import matplotlib.pyplot as plt
 
@@ -190,13 +190,12 @@ def create_swipes(timestamps: List[str], word: str, intervals, path: str):
     ranges = []
     for interval in intervals:
         ranges.append(list(range(interval[0], interval[1] + 1)))
-    print(ranges)
     # print(ranges)
     swipe_list = []
     times = []
     for index_range in ranges:
         for element in index_range:
-            time = timestamps[element]
+            time = timestamps[element - 1]
             times.append(time)
         swipe = Swipe(word, Backing_File(path), times)
         # print(len(times))

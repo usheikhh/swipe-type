@@ -7,6 +7,7 @@ from core.swipe_extractor import (
     create_swipes,
     unique_words_from_file,
     extract_trajectories,
+    write_to_file,
 )
 import os
 import pickle
@@ -27,7 +28,7 @@ if __name__ == "__main__":
                 os.path.join(os.getcwd(), "data", file),
                 unique_word,
             )
-            # write_to_file(trajectories, unique_word)
+            write_to_file(trajectories, unique_word)
             timestamps, word = extract_timestamps_from_file(
                 os.path.join(os.getcwd(), "src", "core", "temp", unique_word + ".log")
             )

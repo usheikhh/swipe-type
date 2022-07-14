@@ -1,4 +1,4 @@
-from core.swipe import Swipe
+from swipe import Swipe
 import numpy as np
 import math
 
@@ -31,6 +31,7 @@ def pairwise_length_vector(swipe: Swipe):
 def pairwise_velocity_vector(swipe: Swipe):
     length_vector = pairwise_length_vector(swipe)
     delta_vector = Feature_Extractor.time_delta(swipe)
+    print(len(length_vector), len(delta_vector))
     assert len(length_vector) == len(
         delta_vector
     ), "Pairwise length and pairwise delta vectors are not the same length"
