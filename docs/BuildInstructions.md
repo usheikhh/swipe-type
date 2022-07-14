@@ -4,6 +4,13 @@
 
 You need Python >= 3 and NodeJS >= 10 interpreters.
 
+### Table of Contents
+
+**[Javascript](#js)**<br>
+**[Python](#py)**<br>
+
+## Javascript
+
 ## Prerequisites
 
 Make sure you have all the dependencies installed:
@@ -72,3 +79,30 @@ this will create the file `somefile-hello-0.png`:
 ```
 
 The output filename pattern in always "username-word-flag.png", where "username" is the user ID (swipe log filename), "word" is the swiped word, and "flag" is either 0 (default) or 1 if the argument `-f` (or `--failed`) is provided.
+
+## Python
+
+Create a virtual environment in the project root:
+
+```console
+python3 -m venv env
+```
+
+Activate the virtual environment
+
+```console
+source env/bin/activate
+```
+
+Install libenchant for PyEnchant
+
+```console
+brew update
+brew install enchant
+```
+
+Install the dependencies
+
+```console
+pip3 install -r src/core/requirements.txt
+```
