@@ -42,7 +42,7 @@ def me_word_test():
     timestamps, word = extract_timestamps_from_file(
         os.path.join(os.getcwd(), "src", "py", "temp", "me.log"), False
     )
-    print("Original:", timestamps)
+    print("Original:", timestamps)   
     delta = compute_timestamp_deltas(timestamps)
     print("Diff:", delta)
     indices = extract_swipes_indices(delta)
