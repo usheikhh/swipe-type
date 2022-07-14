@@ -1,8 +1,8 @@
 import os
 import warnings
-from features import *
-from algo import manhattan, scipy_manhattan
-from swipe_extractor import *
+from core.features import *
+from core.algo import manhattan, scipy_manhattan
+from core.swipe_extractor import *
 
 
 def unique_word_test(filename: str):

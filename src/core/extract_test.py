@@ -1,4 +1,4 @@
-from algo import manhattan
+from core.algo import manhattan
 import os
 
 
@@ -13,9 +13,4 @@ print("\nFILE LINES: \n")
 print(lines)
 
 
-
-
 file.close()
-
-
-

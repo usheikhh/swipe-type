@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 from typing import List
-from swipe import Backing_File, Swipe
+from core.swipe import Backing_File, Swipe
 from pathlib import Path
 import matplotlib.pyplot as plt
 
