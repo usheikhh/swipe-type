@@ -137,7 +137,6 @@ if __name__ == "__main__":
     p = os.path.join(os.getcwd(), "src", "core", "temp")
 
     onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
-    for file in tqdm(onlyfiles):
-        zero_division_length_error(
-            os.path.join(os.getcwd(), "src", "core", "temp", file)
-        )
+    zero_division_length_error(
+        os.path.join(os.getcwd(), "src", "core", "temp", "grove.log")
+    )
