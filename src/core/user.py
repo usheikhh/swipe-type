@@ -16,14 +16,14 @@ from collections import defaultdict
 
 
 def make_template(swipes):
-    mean_template = [0, 0, 0, 0]
+    mean_template = [0, 0, 0, 0, 0]
     count = 0
     for feature_set in swipes:
         count += 1
-        assert len(feature_set) == 4
-        for x in range(0, 4):
+        assert len(feature_set) == 5
+        for x in range(0, 5):
             mean_template[x] += feature_set[x]
-    for y in range(0, 4):
+    for y in range(0, 5):
         mean_template[y] /= count
     return mean_template
 
