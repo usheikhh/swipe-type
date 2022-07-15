@@ -1,4 +1,6 @@
+from re import template
 import warnings
+from tqdm import tqdm
 import math
 from algo import score_calc
 from features import Feature_Extractor
@@ -79,9 +81,9 @@ class User:
 
     def divide_swipes(self, swipes: defaultdict, swipe_count: int):
         template_size = math.floor(swipe_count * 0.7)
-        print("template size:", template_size)
+        # print("template size:", template_size)
         probe_size = swipe_count - template_size
-        print("probe size:", probe_size)
+        # print("probe size:", probe_size)
         counter = 0
         template = []
         probe = []
@@ -95,9 +97,9 @@ class User:
                     probe.append(i)
                     counter += 1
 
-        print("counter:", counter)
-        print("length of template list:", len(template))
-        print("length of probe list:", len(probe))
+        # print("counter:", counter)
+        # print("length of template list:", len(template))
+        # print("length of probe list:", len(probe))
 
         return (template, probe)
 
@@ -113,14 +115,42 @@ if __name__ == "__main__":
         sum += len(v)
     print(sum)
     features = []
-    sum_swipes = 0
     a, b = user.divide_swipes(user.make_all_swipes(), sum)
     for swipe in a:
         features.append(Feature_Extractor.extract_all_features_to_list(swipe))
     # print(features)
-    print(make_template(features))
+    # print(make_template(features))
 
+    #this prints out all the genuine scores
     u = 0
+    genuine_scores = []
+    template_features = make_template(features)
     for swipe in b:
-        print(score_calc(make_template(features), swipe), u)
+        genuine_scores.append(score_calc(template_features, swipe))
         u += 1
+    genuine_scores.sort()
+    print(genuine_scores)
+
+    #Printing out impostor scores
+    impostor_scores = []
+    p =  os.path.join(os.getcwd(), "data")
+    onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
+    for file in tqdm(onlyfiles):
+        user = User(file, os.path.join(os.getcwd(), "data", file),)
+        sum = 0
+        for k, v in user.make_all_swipes().items():
+            # print(k)
+            sum += len(v)
+        print(sum)
+        other_file_features = []
+        other_file_template, other_file_impostor = user.divide_swipes(user.make_all_swipes(), sum)
+        other_file_total = other_file_impostor+other_file_template
+        print("total swipes in Other file",len(other_file_total))
+        print(file)
+        for swipe in other_file_total:
+            impostor_scores.append(score_calc(template_features, swipe))
+        print("impostor scores:\n",impostor_scores) 
+       
+    
+
+        

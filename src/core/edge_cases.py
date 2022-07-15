@@ -82,7 +82,7 @@ def zero_division_length_error(path: str):
     vectors = []
     timestamps, word = extract_timestamps_from_file(path, False)
     delta = compute_timestamp_deltas(timestamps)
-    print("Delta:", delta)
+    print("Delta:", len(delta))
     indices = extract_swipes_indices(delta)
     # print("Indices:", indices)
     if indices is not None:
@@ -136,8 +136,9 @@ def full_run():
 
 
 if __name__ == "__main__":
-    print(
+    print(len(
         zero_division_length_error(
-            os.path.join(os.getcwd(), "src", "core", "temp", "plane.log")
+            os.path.join(os.getcwd(), "data", "krsg1l0i042kjn778rpp6pb1gm.log")
         )
-    )
+    ))
+    
