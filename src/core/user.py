@@ -15,8 +15,8 @@ import os
 from collections import defaultdict
 
 
-class User:
-    def __init__(self, name: str, path: str):
+class User:   
+    def __init__(self, name: str, path: str):  
         self.name = name
         self.path = path
 
@@ -105,4 +105,4 @@ if __name__ == "__main__":
         
 
 
-
+#ur mom
