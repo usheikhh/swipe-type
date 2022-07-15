@@ -136,10 +136,12 @@ class Feature_Extractor:
         feature_values[
             "Pairwise acceleration"
         ] = Feature_Extractor.calculate_pairwise_acceleration(swipe)
-        feature_values[
-            "Average Pairwise acceleration"
-        ] = Feature_Extractor.calculate_average_pairwise_acceleration(swipe)
         feature_values["Percentile Velocity"] = Feature_Extractor.percentile_velocity(
             swipe
         )
         return feature_values
+
+    @staticmethod
+    def extract_all_features_to_list(swipe: Swipe):
+        features = Feature_Extractor.extract_all_features(swipe)
+        return list(features.values())
