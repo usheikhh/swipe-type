@@ -1,4 +1,3 @@
-import string
 import warnings
 import math
 from swipe_extractor import (
@@ -15,8 +14,8 @@ import os
 from collections import defaultdict
 
 
-class User:   
-    def __init__(self, name: str, path: str):  
+class User:
+    def __init__(self, name: str, path: str):
         self.name = name
         self.path = path
 
@@ -63,30 +62,30 @@ class User:
                 )
         return swipeset
 
+    def divide_swipes(self, swipes: defaultdict, swipe_count: int):
+        template_size = math.floor(swipe_count * 0.7)
+        print("template size:", template_size)
+        probe_size = swipe_count - template_size
+        print("probe size:", probe_size)
+        counter = 0
+        template = []
+        probe = []
 
-def divide_swipes(swipes: defaultdict, swipe_count: int):
-    template_size = math.floor(swipe_count*0.7)
-    print("template size:", template_size)
-    probe_size = swipe_count - template_size
-    print("probe size:", probe_size)
-    counter = 0
-    template = []
-    probe = []
+        for v in swipes.values():
+            for i in v:
+                if counter < template_size:
+                    template.append(i)
+                    counter += 1
+                elif counter >= template_size:
+                    probe.append(i)
+                    counter += 1
 
-    for v in swipes.values():
-        for i in v:
-            if counter < template_size:
-                template.append(i)
-                counter +=1    
-            elif counter >= template_size:
-                probe.append(i)
-                counter +=1
-            
-    print("counter:", counter)
-    print("length of template list:", len(template))
-    print("length of probe list:", len(probe))
-   
-    return(template,probe)
+        print("counter:", counter)
+        print("length of template list:", len(template))
+        print("length of probe list:", len(probe))
+
+        return (template, probe)
+
 
 if __name__ == "__main__":
     sum = 0
@@ -99,10 +98,4 @@ if __name__ == "__main__":
         sum += len(v)
     print(sum)
     sum_swipes = 0
-    a,b = (divide_swipes(user.make_all_swipes(), sum))
-
-
-        
-
-
-#ur mom
+    a, b = user.divide_swipes(user.make_all_swipes(), sum)
