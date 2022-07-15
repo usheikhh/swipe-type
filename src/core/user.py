@@ -1,4 +1,3 @@
-from re import template
 import warnings
 from tqdm import tqdm
 import math
@@ -121,7 +120,7 @@ if __name__ == "__main__":
     # print(features)
     # print(make_template(features))
 
-    #this prints out all the genuine scores
+    # this prints out all the genuine scores
     u = 0
     genuine_scores = []
     template_features = make_template(features)
@@ -131,26 +130,27 @@ if __name__ == "__main__":
     genuine_scores.sort()
     print(genuine_scores)
 
-    #Printing out impostor scores
+    # Printing out impostor scores
     impostor_scores = []
-    p =  os.path.join(os.getcwd(), "data")
+    p = os.path.join(os.getcwd(), "data")
     onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
     for file in tqdm(onlyfiles):
-        user = User(file, os.path.join(os.getcwd(), "data", file),)
+        user = User(
+            file,
+            os.path.join(os.getcwd(), "data", file),
+        )
         sum = 0
         for k, v in user.make_all_swipes().items():
             # print(k)
             sum += len(v)
         print(sum)
         other_file_features = []
-        other_file_template, other_file_impostor = user.divide_swipes(user.make_all_swipes(), sum)
-        other_file_total = other_file_impostor+other_file_template
-        print("total swipes in Other file",len(other_file_total))
+        other_file_template, other_file_impostor = user.divide_swipes(
+            user.make_all_swipes(), sum
+        )
+        other_file_total = other_file_impostor + other_file_template
+        print("total swipes in Other file", len(other_file_total))
         print(file)
         for swipe in other_file_total:
             impostor_scores.append(score_calc(template_features, swipe))
-        print("impostor scores:\n",impostor_scores) 
-       
-    
-
-        
+        print("impostor scores:\n", impostor_scores)

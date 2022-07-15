@@ -97,7 +97,7 @@ def zero_division_length_error(path: str):
     elif indices is None:
         warnings.warn("No indices above the threshold, so swipes cannot be made")
         return
-    return swipes
+    return len(swipes)
 
 
 def distance_test(fv1, fv2):
@@ -136,9 +136,14 @@ def full_run():
 
 
 if __name__ == "__main__":
-    print(len(
-        zero_division_length_error(
-            os.path.join(os.getcwd(), "data", "krsg1l0i042kjn778rpp6pb1gm.log")
+    s = 0
+    for word in unique_words_from_file(
+        os.path.join(os.getcwd(), "data", "2c30a5a6amjsgs1ganoo6kg2lb.log")
+    ):
+
+        res = zero_division_length_error(
+            os.path.join(os.getcwd(), "src", "core", "temp", word + ".log")
         )
-    ))
-    
+        if not res is None:
+            s += res
+        print(s)
