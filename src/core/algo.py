@@ -4,7 +4,6 @@ from math import sqrt
 from features import Feature_Extractor
 
 
-
 def manhattan(train, test):
     dist = 0
     for index in range(0, len(train)):
@@ -20,5 +19,8 @@ def scipy_manhattan(train, test):
 def euclidean_distance(a, b):
     return sqrt(sum((e1 - e2) ** 2 for e1, e2 in zip(a, b)))
 
+
 def score_calc(template, impostor_swipe):
-    return scipy_manhattan(template,Feature_Extractor.extract_all_features_to_list(impostor_swipe))
+    return scipy_manhattan(
+        template, Feature_Extractor.extract_all_features_to_list(impostor_swipe)
+    )

@@ -123,4 +123,4 @@ if __name__ == "__main__":
     u = 0
     for swipe in b:
         print(score_calc(make_template(features), swipe), u)
-        u+=1
+        u += 1
