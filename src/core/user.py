@@ -1,6 +1,6 @@
 import warnings
 import math
-from algo import genuine_score_calc
+from algo import score_calc
 from features import Feature_Extractor
 from swipe_extractor import (
     compute_timestamp_deltas,
@@ -122,5 +122,5 @@ if __name__ == "__main__":
 
     u = 0
     for swipe in b:
-        print(genuine_score_calc(make_template(features), swipe), u)
+        print(score_calc(make_template(features), swipe), u)
         u+=1
