@@ -1,5 +1,6 @@
 import warnings
 import math
+from features import Feature_Extractor
 from swipe_extractor import (
     compute_timestamp_deltas,
     create_swipes,
@@ -12,6 +13,19 @@ from swipe_extractor import (
 from swipe_extractor import unique_words_from_file
 import os
 from collections import defaultdict
+
+
+def make_template(swipes):
+    mean_template = [0, 0, 0, 0]
+    count = 0
+    for feature_set in swipes:
+        count += 1
+        assert len(feature_set) == 4
+        for x in range(0, 4):
+            mean_template[x] += feature_set[x]
+    for y in range(0, 4):
+        mean_template[y] /= count
+    return mean_template
 
 
 class User:
@@ -97,5 +111,10 @@ if __name__ == "__main__":
         # print(k)
         sum += len(v)
     print(sum)
+    features = []
     sum_swipes = 0
     a, b = user.divide_swipes(user.make_all_swipes(), sum)
+    for swipe in a:
+        features.append(Feature_Extractor.extract_all_features_to_list(swipe))
+    # print(features)
+    print(make_template(features))
