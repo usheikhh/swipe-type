@@ -1,4 +1,6 @@
+import string
 import warnings
+import math
 from swipe_extractor import (
     compute_timestamp_deltas,
     create_swipes,
@@ -62,6 +64,30 @@ class User:
         return swipeset
 
 
+def divide_swipes(swipes: defaultdict, swipe_count: int):
+    template_size = math.floor(swipe_count*0.7)
+    print("template size:", template_size)
+    probe_size = swipe_count - template_size
+    print("probe size:", probe_size)
+    counter = 0
+    template = []
+    probe = []
+
+    for v in swipes.values():
+        for i in v:
+            if counter < template_size:
+                template.append(i)
+                counter +=1    
+            elif counter >= template_size:
+                probe.append(i)
+                counter +=1
+            
+    print("counter:", counter)
+    print("length of template list:", len(template))
+    print("length of probe list:", len(probe))
+   
+    return(template,probe)
+
 if __name__ == "__main__":
     sum = 0
     user = User(
@@ -72,3 +98,11 @@ if __name__ == "__main__":
         # print(k)
         sum += len(v)
     print(sum)
+    sum_swipes = 0
+    a,b = (divide_swipes(user.make_all_swipes(), sum))
+
+
+        
+
+
+
