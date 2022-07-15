@@ -168,7 +168,7 @@ def into_intervals(indices: List[int]):
     # print("Length of indices: ", len(indices))
     if len(indices) == 0:
         raise ValueError("No indices provided")
-    if len(indices) == 1:
+    elif len(indices) == 1:
         if indices[0] == 0:
             interval = [0, indices[0] + len(indices) + 1]
         else:
@@ -178,7 +178,7 @@ def into_intervals(indices: List[int]):
     try:
         for i in range(0, len(indices)):
             # FIXME: So let's say our indices are: [0, 22, 44], the code currently returns [0, 22], [22, 44]] when instead it should return [0, 22], [23, 44]]
-            s = [indices[i], indices[i + 1]]
+            s = [indices[i], indices[i + 1] + 1]
             intervals.append(s)
         return intervals
     except IndexError:
