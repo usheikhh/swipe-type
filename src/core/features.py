@@ -31,10 +31,18 @@ def pairwise_length_vector(swipe: Swipe):
 def pairwise_velocity_vector(swipe: Swipe):
     length_vector = pairwise_length_vector(swipe)
     delta_vector = Feature_Extractor.time_delta(swipe)
-    print(len(length_vector), len(delta_vector))
-    assert len(length_vector) == len(
-        delta_vector
-    ), "Pairwise length and pairwise delta vectors are not the same length"
+    # print(len(length_vector), len(delta_vector))
+    try:
+        assert len(length_vector) == len(
+            delta_vector
+        ), "Pairwise length and pairwise delta vectors are not the same length"
+    except AssertionError:
+        if len(length_vector) > len(delta_vector):
+            while len(length_vector) > len(delta_vector):
+                length_vector.pop()
+        elif len(length_vector) < len(delta_vector):
+            while len(length_vector) < len(delta_vector):
+                delta_vector.pop()
     velocities = []
     for i in range(0, len(length_vector)):
         velocities.append(float(length_vector[i]) / int(delta_vector[i]))
@@ -106,6 +114,7 @@ class Feature_Extractor:
     @staticmethod
     def calculate_average_pairwise_acceleration(swipe: Swipe):
         # This is equivalent to what we refer to as total swipe acceleration in the week 7 slides
+        # print("Pairwise acceleration:", pairwise_acceleration_vector(swipe))
         return float(
             sum(pairwise_acceleration_vector(swipe))
             / len(pairwise_acceleration_vector(swipe))

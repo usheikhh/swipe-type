@@ -82,20 +82,24 @@ def zero_division_length_error(path: str):
     vectors = []
     timestamps, word = extract_timestamps_from_file(path, False)
     delta = compute_timestamp_deltas(timestamps)
-    print("Delta:", delta)
+    # print("Delta:", delta)
     indices = extract_swipes_indices(delta)
-    print("Indices:", indices)
-    intervals = into_intervals(indices)
-    print("Intervals:", intervals)
-    swipes: List[Swipe] = create_swipes(
-        timestamps,
-        word,
-        intervals,
-        path,
-    )
+    # print("Indices:", indices)
+    if indices is not None:
+        intervals = into_intervals(indices)
+        # print("Intervals:", intervals)
+        swipes: List[Swipe] = create_swipes(
+            timestamps,
+            word,
+            intervals,
+            path,
+        )
+    elif indices is None:
+        warnings.warn("No indices above the threshold, so swipes cannot be made")
+        return
     for swipe in swipes:
-        print(swipe.get_key())
-        print(Feature_Extractor.extract_all_features(swipe))
+        # print(swipe.get_key())
+        Feature_Extractor.extract_all_features(swipe)
     return vectors
 
 
@@ -127,6 +131,7 @@ def full_run():
             swipeset.append(swipes)
         elif indices is None:
             warnings.warn("No indices above the threshold, so swipes cannot be made")
+            return
     for swipes in tqdm(swipeset):
         for swipe in swipes:
             print(swipe.get_key())
@@ -137,6 +142,12 @@ if __name__ == "__main__":
     p = os.path.join(os.getcwd(), "src", "core", "temp")
 
     onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
-    zero_division_length_error(
-        os.path.join(os.getcwd(), "src", "core", "temp", "grove.log")
-    )
+    for file in tqdm(onlyfiles):
+        # FIXME: TN.log has 2 recurring rows that cause a divide by zero error so I removed it
+        # 2 recurring rows of:
+        # tn_aegon_genealogy_war 1583690066424 423 228 touchmove 339 159 0 0 0 tn 0
+        # tn_aegon_genealogy_war 1583690066435 423 228 touchend 339 159 0 0 0 tn 0
+        if not file == "word.log":
+            zero_division_length_error(
+                os.path.join(os.getcwd(), "src", "core", "temp", file)
+            )
