@@ -1,4 +1,5 @@
 import warnings
+import pickle
 from tqdm import tqdm
 import math
 from algo import score_calc
@@ -47,7 +48,7 @@ class User:
         for unique_word in words:
             # At this current moment we can reasonably assume that all the files have been generated
             trajectories, word = extract_trajectories(self.get_path(), unique_word)
-            write_to_file(trajectories, unique_word)
+            # write_to_file(trajectories, unique_word)
             timestamps, word = extract_timestamps_from_file(
                 os.path.join(os.getcwd(), "src", "core", "temp", unique_word + ".log")
             )
@@ -103,7 +104,8 @@ class User:
         return (template, probe)
 
 
-if __name__ == "__main__":
+def process_files():
+    PIK = "genuine.dat"
     sum = 0
     user = User(
         "2c30a5a6amjsgs1ganoo6kg2lb",
@@ -112,7 +114,7 @@ if __name__ == "__main__":
     for k, v in user.make_all_swipes().items():
         # print(k)
         sum += len(v)
-    print(sum)
+    # print(sum)
     features = []
     a, b = user.divide_swipes(user.make_all_swipes(), sum)
     for swipe in a:
@@ -128,7 +130,9 @@ if __name__ == "__main__":
         genuine_scores.append(score_calc(template_features, swipe))
         u += 1
     genuine_scores.sort()
-    print(genuine_scores)
+    with open(PIK, "wb") as f:
+        pickle.dump(genuine_scores, f)
+    # print(" Genuine scores", genuine_scores)
 
     # Printing out impostor scores
     impostor_scores = []
@@ -143,8 +147,7 @@ if __name__ == "__main__":
         for k, v in user.make_all_swipes().items():
             # print(k)
             sum += len(v)
-        print(sum)
-        other_file_features = []
+        print("Swipe Length:", sum)
         other_file_template, other_file_impostor = user.divide_swipes(
             user.make_all_swipes(), sum
         )
@@ -153,4 +156,13 @@ if __name__ == "__main__":
         print(file)
         for swipe in other_file_total:
             impostor_scores.append(score_calc(template_features, swipe))
-        print("impostor scores:\n", impostor_scores)
+        imposter_file_path = os.path.join(os.getcwd(), "gen", "imposter_" + file)
+        # print(imposter_file_path)
+
+        with open(imposter_file_path, "wb") as f:
+            pickle.dump(impostor_scores, f)
+        # print("impostor scores:\n", impostor_scores)
+
+
+if __name__ == "__main__":
+    process_files()
