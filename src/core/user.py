@@ -24,12 +24,12 @@ from collections import defaultdict
 
 def make_template(swipes):
     mean_template = [0, 0, 0, 0, 0]
-    count = 0
+    count = 1
     for feature_set in swipes:
-        count += 1
         assert len(feature_set) == 5
         for x in range(0, 5):
             mean_template[x] += feature_set[x]
+        count += 1       
     for y in range(0, 5):
         mean_template[y] /= count
     return mean_template
@@ -206,16 +206,49 @@ def stats():
     
     return genuine_scores
 
+def generate_all_genuine_scores():
+    p = os.path.join(os.getcwd(), "data")
+    onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
+    for file in tqdm(onlyfiles):
+        sum = 0
+        user = User(
+            file,
+            os.path.join(os.getcwd(), "data", file),
+        )
+        for k, v in user.make_all_swipes().items():
+            # print(k)
+            sum += len(v)
+        # print(sum)
+        features = []
+        a, b = user.divide_swipes(user.make_all_swipes(), sum)
+        for swipe in a:
+            features.append(Feature_Extractor.extract_all_features_to_list(swipe))
+        # print(features)
+        # print(make_template(features))
+
+        # this prints out all the genuine scores
+        u = 0
+        genuine_scores = []
+        template_features = make_template(features)
+        for swipe in b:
+            genuine_scores.append(score_calc(template_features, swipe))
+            u += 1
+        genuine_file_path = os.path.join(os.getcwd(), "genuine_scores", "genuine_" + file)
+        print(file)
+        with open(genuine_file_path, "wb") as f:
+            pickle.dump(genuine_scores, f)
+
 
 
 
 if __name__ == "__main__":
-    items = list(loadall("genuine.dat"))
-    l = items[0]
-    print("FRR:",calc_FRR(200,l))
-    x = list(loadall("gen/imposter_2c30a5a6amjsgs1ganoo6kg2lb.log"))
-    impostor_scores = x[0]
-    print("\nFAR:", calc_FAR(200,impostor_scores))
+    # items = list(loadall("genuine.dat"))
+    # l = items[0]
+    # print("FRR:",calc_FRR(200,l))
+    # x = list(loadall("gen/imposter_2c30a5a6amjsgs1ganoo6kg2lb.log"))
+    # impostor_scores = x[0]
+    # print("\nFAR:", calc_FAR(200,impostor_scores))
+    generate_all_genuine_scores()
 
 
     
