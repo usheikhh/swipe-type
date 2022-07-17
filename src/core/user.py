@@ -2,7 +2,8 @@ import warnings
 import pickle
 from tqdm import tqdm
 import math
-from algo import score_calc
+import statistics
+from algo import score_calc, calc_FRR, calc_FAR
 from features import Feature_Extractor
 from swipe_extractor import (
     compute_timestamp_deltas,
@@ -164,5 +165,51 @@ def process_files():
         # print("impostor scores:\n", impostor_scores)
 
 
+def loadall(filename):
+    with open(filename, "rb") as f:
+        while True:
+            try:
+                yield pickle.load(f)
+            except EOFError:
+                break
+
+def stats():
+    p = os.path.join(os.getcwd(), "data")
+    onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
+    sum = 0
+    genuine_scores = []
+    for file in tqdm(onlyfiles):
+        user = User(
+            file,
+            os.path.join(os.getcwd(), "data", file),
+        )
+        for k, v in user.make_all_swipes().items():
+            # print(k)
+            sum += len(v)
+        features = []
+        a, b = user.divide_swipes(user.make_all_swipes(), sum)
+
+        for swipe in a:
+            features.append(Feature_Extractor.extract_all_features_to_list(swipe))
+    
+        template_features = make_template(features)
+        for swipe in b:
+            genuine_scores.append(score_calc(template_features, swipe))
+    
+    print("AVG:", sum(genuine_scores)/len(genuine_scores))
+    print("Mean:", statistics.mean(genuine_scores))
+    print("Median:", statistics.median(genuine_scores))
+    print("St. dev:", statistics.stdev(genuine_scores))
+    
+    return genuine_scores
+
 if __name__ == "__main__":
-    process_files()
+    items = list(loadall("genuine.dat"))
+    l = items[0]
+    print("FRR:",calc_FRR(200,l))
+    x = list(loadall("gen/imposter_2c30a5a6amjsgs1ganoo6kg2lb.log"))
+    impostor_scores = x[0]
+    print("\nFAR:", calc_FAR(200,impostor_scores))
+    
+    
+
