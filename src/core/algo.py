@@ -40,3 +40,4 @@ def calc_FAR(threshold, impostor_scores: list):
         if score <= threshold:
             false_accept +=1
     return false_accept/total_impostor_scores
+

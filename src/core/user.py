@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+import numpy as np
+#all imports for ROC
 import warnings
 import pickle
 from tqdm import tqdm
@@ -203,6 +206,9 @@ def stats():
     
     return genuine_scores
 
+
+
+
 if __name__ == "__main__":
     items = list(loadall("genuine.dat"))
     l = items[0]
@@ -210,6 +216,8 @@ if __name__ == "__main__":
     x = list(loadall("gen/imposter_2c30a5a6amjsgs1ganoo6kg2lb.log"))
     impostor_scores = x[0]
     print("\nFAR:", calc_FAR(200,impostor_scores))
+
+
     
     
 
