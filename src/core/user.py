@@ -1,12 +1,14 @@
+from fileinput import filename
 import matplotlib.pyplot as plt
 import numpy as np
 
+# all imports for ROC
 import warnings
 import pickle
 from tqdm import tqdm
 import math
 import statistics
-from algo import score_calc, calc_FRR, calc_FAR, calc_EER, ROC_curve
+from algo import score_calc, calc_FRR, calc_FAR, calc_EER
 from features import Feature_Extractor
 from swipe_extractor import (
     compute_timestamp_deltas,
@@ -53,10 +55,11 @@ class User:
             # At this current moment we can reasonably assume that all the files have been generated
             trajectories, word = extract_trajectories(self.get_path(), unique_word)
             # write_to_file(trajectories, unique_word)
+          
             timestamps, word = extract_timestamps_from_file(
                 os.path.join(os.getcwd(), "src", "core", "temp", unique_word + ".log")
             )
-
+            
             # print("New:", timestamps)
             # print(unique_word)
             delta = compute_timestamp_deltas(timestamps)
@@ -245,40 +248,40 @@ def generate_all_genuine_scores():
         except FileNotFoundError:
             pass
 
+def avg_swipes():
+    p = os.path.join(os.getcwd(), "data")
+    onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
+    file_swipes = []
+    for file in tqdm(onlyfiles):
+        if file == ".DS_Store" :
+            pass
+        print(file)
+        sum = 0
+        if file == ".log":
+            return
+        else:
+            user = User(
+                file,
+                os.path.join(os.getcwd(), "data", file),
+            )
+            for swipe in user.make_all_swipes().items():
+                sum +=1
+        file_swipes.append(sum)
+        #print(file_swipes)
+    return file_swipes
+    
+
+
+
+
 
 if __name__ == "__main__":
-    PIK = "genuine2.dat"
-    sum = 0
-    user = User(
-        "0p3e8p7qdeti2ci3ppbc8kdd8c",
-        os.path.join(os.getcwd(), "data", "0p3e8p7qdeti2ci3ppbc8kdd8c.log"),
-    )
-    for k, v in user.make_all_swipes().items():
-        # print(k)
-        sum += len(v)
-    # print(sum)
-    features = []
-    a, b = user.divide_swipes(user.make_all_swipes(), sum)
-    for swipe in a:
-        features.append(Feature_Extractor.extract_all_features_to_list(swipe))
-    # print(features)
-    # print(make_template(features))
-
-    # this prints out all the genuine scores
-    u = 0
-    genuine_scores = []
-    template_features = make_template(features)
-    for swipe in b:
-        genuine_scores.append(score_calc(template_features, swipe))
-        u += 1
-    genuine_scores.sort()
-    with open(PIK, "wb") as f:
-        pickle.dump(genuine_scores, f)
-    items = list(loadall("genuine.dat"))
-    genuine_scores = items[0]
-    print("FRR:", calc_FRR(200, genuine_scores))
-    x = list(loadall("gen/imposter_0p3e8p7qdeti2ci3ppbc8kdd8c.log"))
-    impostor_scores = x[0]
-    print("FAR:", calc_FAR(200, impostor_scores))
-    print("EER:", calc_EER(200, genuine_scores, impostor_scores))
-    ROC_curve(200, 1000, genuine_scores, impostor_scores, 0.1)
+    # items = list(loadall("genuine.dat"))
+    # genuine_scores = items[0]
+    # print("FRR:",calc_FRR(200,genuine_scores))
+    # x = list(loadall("gen/imposter_2c30a5a6amjsgs1ganoo6kg2lb.log"))
+    # impostor_scores = x[0]
+    # print("FAR:", calc_FAR(200,impostor_scores))
+    # print("EER:", calc_EER(200, genuine_scores, impostor_scores))
+    print("Avg swipes:", avg_swipes())
+    
