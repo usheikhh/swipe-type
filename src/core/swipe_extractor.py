@@ -15,7 +15,7 @@ def plot_deltas(list_delta):
 
     plt.ylabel("data")  # set the label for y axis
     plt.xlabel("index")  # set the label for x-axis
-    plt.title("Plotting a list")  # set the title of the graph
+    plt.title("Time Deltas")  # set the title of the graph
     plt.show()  # display the graph
 
 
@@ -30,22 +30,22 @@ def grab_first():
 
 def unique_words(df: pd.DataFrame):
     data = df.iloc[:, :1].values.tolist()
-    store = []
+    store = set()
     for row in data:
         # Since the log file is not actually a csv we can't do a simple column name/index lookup
         string = row[10]
         sep = " "
         # Use a regex of the space character to split out the sentence column from the string
         sentence = string.split(sep, 1)[0]
-        store.append(sentence)
-    return set(store)
+        store.add(sentence)
+    return store
 
 
 def unique_words_from_file(path: str):
     file = open(path, "r")
     lines = file.readlines()
     search_space = lines[1:]
-    found = []
+    found = set()
     for line in search_space:
         word = list(line.split(" "))[10]
         if (
@@ -57,13 +57,13 @@ def unique_words_from_file(path: str):
             and word != "interactions"
             and word != "haciendo"
         ):
-            found.append(word)
-    return set(found)
+            found.add(word)
+    return found
 
 
 def unique_sentences(df: pd.DataFrame):
     data = df.iloc[:, :1].values.tolist()
-    store = []
+    store = set()
     for row in data:
         # Since the log file is not actually a csv we can;t do a simple column name/index lookup
         string = row[0]
@@ -71,7 +71,7 @@ def unique_sentences(df: pd.DataFrame):
         # Use a regex of the space character to split out the sentence column from the string
         sentence = string.split(sep, 1)[0]
         store.append(sentence)
-    return set(store)
+    return store
 
 
 def extract_trajectories(path: str, key: str):
