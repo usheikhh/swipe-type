@@ -31,7 +31,11 @@ def make_template(swipes):
             mean_template[x] += feature_set[x]
         count += 1       
     for y in range(0, 5):
-        mean_template[y] /= count
+        try:
+            mean_template[y] /= count
+        except FileNotFoundError:
+            pass
+            
     return mean_template
 
 
