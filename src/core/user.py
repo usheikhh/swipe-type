@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
-#all imports for ROC
+
+# all imports for ROC
 import warnings
 import pickle
 from tqdm import tqdm
@@ -29,13 +30,13 @@ def make_template(swipes):
         assert len(feature_set) == 5
         for x in range(0, 5):
             mean_template[x] += feature_set[x]
-        count += 1       
+        count += 1
     for y in range(0, 5):
         try:
             mean_template[y] /= count
-        except FileNotFoundError:
-            pass
-            
+        except ZeroDivisionError:
+            return [0, 0, 0, 0, 0]
+
     return mean_template
 
 
@@ -180,6 +181,7 @@ def loadall(filename):
             except EOFError:
                 break
 
+
 def stats():
     p = os.path.join(os.getcwd(), "data")
     onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
@@ -198,17 +200,18 @@ def stats():
 
         for swipe in a:
             features.append(Feature_Extractor.extract_all_features_to_list(swipe))
-    
+
         template_features = make_template(features)
         for swipe in b:
             genuine_scores.append(score_calc(template_features, swipe))
-    
-    print("AVG:", sum(genuine_scores)/len(genuine_scores))
+
+    print("AVG:", sum(genuine_scores) / len(genuine_scores))
     print("Mean:", statistics.mean(genuine_scores))
     print("Median:", statistics.median(genuine_scores))
     print("St. dev:", statistics.stdev(genuine_scores))
-    
+
     return genuine_scores
+
 
 def generate_all_genuine_scores():
     p = os.path.join(os.getcwd(), "data")
@@ -237,12 +240,15 @@ def generate_all_genuine_scores():
         for swipe in b:
             genuine_scores.append(score_calc(template_features, swipe))
             u += 1
-        genuine_file_path = os.path.join(os.getcwd(), "genuine_scores", "genuine_" + file)
+        genuine_file_path = os.path.join(
+            os.getcwd(), "genuine_scores", "genuine_" + file
+        )
         print(file)
-        with open(genuine_file_path, "wb") as f:
-            pickle.dump(genuine_scores, f)
-
-
+        try:
+            with open(genuine_file_path, "wb") as f:
+                pickle.dump(genuine_scores, f)
+        except FileNotFoundError:
+            pass
 
 
 if __name__ == "__main__":
@@ -253,8 +259,3 @@ if __name__ == "__main__":
     # impostor_scores = x[0]
     # print("\nFAR:", calc_FAR(200,impostor_scores))
     generate_all_genuine_scores()
-
-
-    
-    
-
