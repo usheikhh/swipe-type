@@ -25,17 +25,13 @@ from collections import defaultdict
 
 def make_template(swipes):
     mean_template = [0, 0, 0, 0, 0]
-    count = 1
+
     for feature_set in swipes:
         assert len(feature_set) == 5
         for x in range(0, 5):
             mean_template[x] += feature_set[x]
-        count += 1
     for y in range(0, 5):
-        try:
-            mean_template[y] /= count
-        except ZeroDivisionError:
-            return [0, 0, 0, 0, 0]
+        mean_template[y] /= 5
 
     return mean_template
 
@@ -258,4 +254,18 @@ if __name__ == "__main__":
     # x = list(loadall("gen/imposter_2c30a5a6amjsgs1ganoo6kg2lb.log"))
     # impostor_scores = x[0]
     # print("\nFAR:", calc_FAR(200,impostor_scores))
-    generate_all_genuine_scores()
+    user = User(
+        "2c30a5a6amjsgs1ganoo6kg2lb",
+        os.path.join(os.getcwd(), "data", "2c30a5a6amjsgs1ganoo6kg2lb.log"),
+    )
+    sum = 0
+    for k, v in user.make_all_swipes().items():
+        # print(k)
+        sum += len(v)
+    # print(sum)
+    features = []
+    a, b = user.divide_swipes(user.make_all_swipes(), sum)
+    for swipe in a:
+        features.append(Feature_Extractor.extract_all_features_to_list(swipe))
+    print(features)
+    print(make_template(features))
