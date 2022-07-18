@@ -51,7 +51,7 @@ def calc_EER(threshold, genuine_scores, impostor_scores):
     ) / 2
 
 
-def ROC_curve(
+def DET_curve(
     min_threshold: int,
     max_threshold: int,
     genuine_scores: list,
@@ -68,4 +68,5 @@ def ROC_curve(
     plt.plot(t, FAR_values, label="FAR Values")
     plt.plot(t, FRR_values, label="FRR Values")
     plt.legend()
+    plt.savefig("DET.png")
     plt.show()
