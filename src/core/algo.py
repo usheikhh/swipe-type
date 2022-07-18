@@ -41,3 +41,6 @@ def calc_FAR(threshold, impostor_scores: list):
             false_accept +=1
     return false_accept/total_impostor_scores
 
+def calc_EER(threshold, genuine_scores, impostor_scores):
+    return (calc_FAR(threshold, impostor_scores)+calc_FRR(threshold, genuine_scores))/2
+

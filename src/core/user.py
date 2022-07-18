@@ -7,7 +7,7 @@ import pickle
 from tqdm import tqdm
 import math
 import statistics
-from algo import score_calc, calc_FRR, calc_FAR
+from algo import score_calc, calc_FRR, calc_FAR, calc_EER
 from features import Feature_Extractor
 from swipe_extractor import (
     compute_timestamp_deltas,
@@ -248,24 +248,11 @@ def generate_all_genuine_scores():
 
 
 if __name__ == "__main__":
-    # items = list(loadall("genuine.dat"))
-    # l = items[0]
-    # print("FRR:",calc_FRR(200,l))
-    # x = list(loadall("gen/imposter_2c30a5a6amjsgs1ganoo6kg2lb.log"))
-    # impostor_scores = x[0]
-    # print("\nFAR:", calc_FAR(200,impostor_scores))
-    user = User(
-        "2c30a5a6amjsgs1ganoo6kg2lb",
-        os.path.join(os.getcwd(), "data", "2c30a5a6amjsgs1ganoo6kg2lb.log"),
-    )
-    sum = 0
-    for k, v in user.make_all_swipes().items():
-        # print(k)
-        sum += len(v)
-    # print(sum)
-    features = []
-    a, b = user.divide_swipes(user.make_all_swipes(), sum)
-    for swipe in a:
-        features.append(Feature_Extractor.extract_all_features_to_list(swipe))
-    print(features)
-    print(make_template(features))
+    items = list(loadall("genuine.dat"))
+    genuine_scores = items[0]
+    print("FRR:",calc_FRR(200,genuine_scores))
+    x = list(loadall("gen/imposter_2c30a5a6amjsgs1ganoo6kg2lb.log"))
+    impostor_scores = x[0]
+    print("FAR:", calc_FAR(200,impostor_scores))
+    print("EER:", calc_EER(200, genuine_scores, impostor_scores))
+    
