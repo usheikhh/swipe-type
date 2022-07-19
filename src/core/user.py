@@ -1,5 +1,7 @@
 import warnings
+import pandas as pd
 import pickle
+import matplotlib.pyplot as plt
 from tqdm import tqdm
 import math
 import statistics
@@ -266,14 +268,22 @@ def avg_swipes():
         # print(file_swipes)
     return sum(file_swipes) / len(file_swipes)
 
+def swipe_length_histogram():
+    p = os.path.join(os.getcwd(), "data")
+    onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
+    swipe_lengths = []
+    for file in tqdm(onlyfiles):
+        user = User(
+            file,
+            os.path.join(os.getcwd(), "data", file),
+        )
+        for _,swipe in user.make_all_swipes().items():
+                for obj in swipe:
+                    swipe_lengths.append(Feature_Extractor.length(obj))
+        avg = sum(swipe_lengths)/len(swipe_lengths)
+        st_dev = statistics.stdev(swipe_lengths)
+    print("Avg:", avg)
+    print("st. dev", st_dev) #GET RID OF .DS Store
 
 if __name__ == "__main__":
-    items = list(loadall("genuine.dat"))
-    genuine_scores = items[0]
-    print("FRR:", calc_FRR(200, genuine_scores))
-    x = list(loadall("gen/imposter_2c30a5a6amjsgs1ganoo6kg2lb.log"))
-    impostor_scores = x[0]
-    print("FAR:", calc_FAR(200, impostor_scores))
-    print("EER:", calc_EER(200, genuine_scores, impostor_scores))
-    print("Avg swipes:", avg_swipes())
-    # DET_curve(200, 1000, genuine_scores, impostor_scores, 0.1)
+   swipe_length_histogram()
