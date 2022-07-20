@@ -13,6 +13,8 @@ import pickle
 import warnings
 from tqdm import tqdm
 
+from core.util import flatten
+
 if __name__ == "__main__":
     # write_all_word_logs()
     p = os.path.join(os.getcwd(), "data")
@@ -50,6 +52,6 @@ if __name__ == "__main__":
                 warnings.warn(
                     "No indices above the threshold, so swipes cannot be made"
                 )
-    for swipes in swipeset:
-        for swipe in swipes:
-            (Feature_Extractor.extract_all_features(swipe))
+    flat_swipes = flatten(swipeset)
+    for swipe in tqdm(flat_swipes):
+        (Feature_Extractor.extract_all_features(swipe))

@@ -1,10 +1,5 @@
-from swipe import Swipe
-import numpy as np
-import math
-
-
-def split_into_sized_chunks(lst, size: int):
-    return np.array_split(lst, size)
+from .swipe import Swipe
+from math import floor
 
 
 # This function creates an array of the length of from point to point
@@ -125,7 +120,7 @@ class Feature_Extractor:
         if percentile >= 1.0 or percentile <= 0.0:
             raise ValueError("Percentile should be between 0 and 1 non-inclusive")
         velocity_vector = pairwise_velocity_vector(initial_swipe)
-        row_count = math.floor(len(velocity_vector) * percentile)
+        row_count = floor(len(velocity_vector) * percentile)
         return sum(velocity_vector[0:row_count])
 
     @staticmethod

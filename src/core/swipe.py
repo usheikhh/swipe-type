@@ -1,10 +1,3 @@
-def string_to_list(string: str):
-    # FIXME: Improve this regex so it only looks at spaces and does not accidentally think a quote, or anything else, is
-    # part of the expression string
-    res = list(string.split(" "))
-    return res
-
-
 class Backing_File:
     def __init__(self, path: str):
         self.path = path
