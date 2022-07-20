@@ -50,3 +50,6 @@ if __name__ == "__main__":
                 warnings.warn(
                     "No indices above the threshold, so swipes cannot be made"
                 )
+    for swipes in swipeset:
+        for swipe in swipes:
+            (Feature_Extractor.extract_all_features(swipe))

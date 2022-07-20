@@ -1,5 +1,4 @@
 import warnings
-import pandas as pd
 import pickle
 import matplotlib.pyplot as plt
 from tqdm import tqdm
@@ -34,6 +33,10 @@ def make_template(swipes):
     return mean_template
 
 
+def flatten(xss):
+    return [x for xs in xss for x in xs]
+
+
 class User:
     def __init__(self, name: str, path: str):
         self.name = name
@@ -46,13 +49,9 @@ class User:
         return self.name
 
     def make_all_swipes(self):
-        swipeset = defaultdict(list)
+        swipeset = []
         words = unique_words_from_file(self.get_path())
         for unique_word in words:
-            # At this current moment we can reasonably assume that all the files have been generated
-            trajectories, word = extract_trajectories(self.get_path(), unique_word)
-            # write_to_file(trajectories, unique_word)
-
             timestamps, word = extract_timestamps_from_file(
                 os.path.join(os.getcwd(), "src", "core", "temp", unique_word + ".log")
             )
@@ -76,14 +75,14 @@ class User:
                     ),
                 )
                 for swipe in swipes:
-                    swipeset[word].append(swipe)
+                    swipeset.append(swipe)
             elif indices is None:
                 warnings.warn(
                     "No indices above the threshold, so swipes cannot be made"
                 )
         return swipeset
 
-    def divide_swipes(self, swipes: defaultdict, swipe_count: int):
+    def divide_swipes(self, swipes: list, swipe_count: int):
         template_size = math.floor(swipe_count * 0.7)
         # print("template size:", template_size)
         probe_size = swipe_count - template_size
@@ -91,8 +90,8 @@ class User:
         counter = 0
         template = []
         probe = []
-
-        for v in swipes.values():
+        # * I think qw can flatten the swipes nested array here to avoid the double loop
+        for v in swipes:
             for i in v:
                 if counter < template_size:
                     template.append(i)
@@ -115,7 +114,7 @@ def process_files():
         "2c30a5a6amjsgs1ganoo6kg2lb",
         os.path.join(os.getcwd(), "data", "2c30a5a6amjsgs1ganoo6kg2lb.log"),
     )
-    for k, v in user.make_all_swipes().items():
+    for v in user.make_all_swipes():
         # print(k)
         sum += len(v)
     # print(sum)
@@ -268,22 +267,26 @@ def avg_swipes():
         # print(file_swipes)
     return sum(file_swipes) / len(file_swipes)
 
+
 def swipe_length_histogram():
     p = os.path.join(os.getcwd(), "data")
     onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
     swipe_lengths = []
+    swipes = []
     for file in tqdm(onlyfiles):
         user = User(
             file,
             os.path.join(os.getcwd(), "data", file),
         )
-        for _,swipe in user.make_all_swipes().items():
-                for obj in swipe:
-                    swipe_lengths.append(Feature_Extractor.length(obj))
-        avg = sum(swipe_lengths)/len(swipe_lengths)
-        st_dev = statistics.stdev(swipe_lengths)
+        swipes.append(user.make_all_swipes())
+    flat_swipes = flatten(swipes)
+    for swipe in tqdm(flat_swipes):
+        swipe_lengths.append(Feature_Extractor.length(swipe))
+    avg = sum(swipe_lengths) / len(swipe_lengths)
+    st_dev = statistics.stdev(swipe_lengths)
     print("Avg:", avg)
-    print("st. dev", st_dev) #GET RID OF .DS Store
+    print("st. dev", st_dev)
+
 
 if __name__ == "__main__":
-   swipe_length_histogram()
+    swipe_length_histogram()
