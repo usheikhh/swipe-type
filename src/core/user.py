@@ -4,20 +4,18 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 import math
 import statistics
-from algo import score_calc, calc_FRR, calc_FAR, calc_EER, DET_curve
+from algo import score_calc
+from core.util import flatten
 from features import Feature_Extractor
 from swipe_extractor import (
     compute_timestamp_deltas,
     create_swipes,
     extract_swipes_indices,
     extract_timestamps_from_file,
-    extract_trajectories,
     into_intervals,
-    write_to_file,
 )
 from swipe_extractor import unique_words_from_file
 import os
-from collections import defaultdict
 
 
 def make_template(swipes):
@@ -31,10 +29,6 @@ def make_template(swipes):
         mean_template[y] /= 5
 
     return mean_template
-
-
-def flatten(xss):
-    return [x for xs in xss for x in xs]
 
 
 class User:
