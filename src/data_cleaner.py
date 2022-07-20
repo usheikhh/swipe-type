@@ -35,7 +35,7 @@ def get_all_json_files(dir_path: str, keep_android: bool = True):
                 print(os.path.join(root_path, file_name + ".log"))
                 if os.path.exists(os.path.join(root_path, file_name + ".log")):
                     os.remove(os.path.join(root_path, file_name + ".log"))
-                    delete_json_files(dir_path)
+    delete_json_files(dir_path)
 
 
 def check_vendor(path: str):
