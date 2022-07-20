@@ -1,9 +1,10 @@
 import pandas as pd
 import os
 from typing import List
-from swipe import Backing_File, Swipe
+from .swipe import Backing_File, Swipe
 from pathlib import Path
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 
 THRESHOLD = 30
 
@@ -205,3 +206,19 @@ def create_swipes(timestamps: List[str], word: str, intervals, path: str):
         # Clear the existing times before iterating again
         times = []
     return swipe_list
+
+
+def write_all_word_logs():
+    p = os.path.join(os.getcwd(), "data")
+    onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
+    for file in tqdm(onlyfiles):
+        # print(file)
+        words = unique_words_from_file(os.path.join(os.getcwd(), "data", file))
+        # print(words)
+        for unique_word in words:
+            # At this current moment we can reasonably assume that all the files have been generated
+            trajectories, word = extract_trajectories(
+                os.path.join(os.getcwd(), "data", file),
+                unique_word,
+            )
+            write_to_file(trajectories, unique_word)
