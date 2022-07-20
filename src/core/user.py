@@ -1,11 +1,12 @@
 import warnings
 import pickle
+import timeit
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 import math
 import statistics
 from algo import score_calc
-from core.util import flatten
+from util import flatten
 from features import Feature_Extractor
 from swipe_extractor import (
     compute_timestamp_deltas,
@@ -19,14 +20,14 @@ import os
 
 
 def make_template(swipes):
-    mean_template = [0, 0, 0, 0, 0]
+    mean_template = [0, 0, 0, 0]
 
     for feature_set in swipes:
-        assert len(feature_set) == 5
-        for x in range(0, 5):
+        assert len(feature_set) == 4
+        for x in range(0, 4):
             mean_template[x] += feature_set[x]
-    for y in range(0, 5):
-        mean_template[y] /= 5
+    for y in range(0, 4):
+        mean_template[y] /= 4
 
     return mean_template
 
@@ -76,27 +77,17 @@ class User:
                 )
         return swipeset
 
-    def divide_swipes(self, swipes: list, swipe_count: int):
-        template_size = math.floor(swipe_count * 0.7)
-        # print("template size:", template_size)
-        probe_size = swipe_count - template_size
-        # print("probe size:", probe_size)
-        counter = 0
-        template = []
-        probe = []
-        # * I think qw can flatten the swipes nested array here to avoid the double loop
-        for v in swipes:
-            for i in v:
-                if counter < template_size:
-                    template.append(i)
-                    counter += 1
-                elif counter >= template_size:
-                    probe.append(i)
-                    counter += 1
+    def divide_swipes(self, swipes: list):
+        template_size = math.floor(len(swipes) * 0.7)
+        probe_size = len(swipes) - template_size
+        print("Swipe Count: ", len(swipes))
+        print("template size:", template_size)
+        print("probe size:", probe_size)
+        template = swipes[:template_size]
+        probe = swipes[template_size:]
 
-        # print("counter:", counter)
-        # print("length of template list:", len(template))
-        # print("length of probe list:", len(probe))
+        print("length of template list:", len(template))
+        print("length of probe list:", len(probe))
 
         return (template, probe)
 
@@ -173,18 +164,14 @@ def loadall(filename):
 def stats():
     p = os.path.join(os.getcwd(), "data")
     onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
-    sum = 0
     genuine_scores = []
     for file in tqdm(onlyfiles):
         user = User(
             file,
             os.path.join(os.getcwd(), "data", file),
         )
-        for k, v in user.make_all_swipes().items():
-            # print(k)
-            sum += len(v)
         features = []
-        a, b = user.divide_swipes(user.make_all_swipes(), sum)
+        a, b = user.divide_swipes(user.make_all_swipes())
 
         for swipe in a:
             features.append(Feature_Extractor.extract_all_features_to_list(swipe))
@@ -283,4 +270,19 @@ def swipe_length_histogram():
 
 
 if __name__ == "__main__":
-    swipe_length_histogram()
+    p = os.path.join(os.getcwd(), "data")
+    features = []
+    onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
+    genuine_scores = []
+    for file in tqdm(onlyfiles):
+        # print("Start time :", starting_time)
+        user = User(
+            file,
+            os.path.join(os.getcwd(), "data", file),
+        )
+
+        a, b = user.divide_swipes(user.make_all_swipes())
+        for swipe in a:
+            starting_time = timeit.default_timer()
+            features.append(Feature_Extractor.extract_all_features_to_list(swipe))
+            print("Time difference :", timeit.default_timer() - starting_time)

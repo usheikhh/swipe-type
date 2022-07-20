@@ -1,4 +1,4 @@
-from .swipe import Swipe
+from swipe import Swipe
 from math import floor
 
 
@@ -131,9 +131,9 @@ class Feature_Extractor:
         feature_values[
             "Pairwise acceleration"
         ] = Feature_Extractor.calculate_pairwise_acceleration(swipe)
-        feature_values[
-            "Average Pairwise acceleration"
-        ] = Feature_Extractor.calculate_average_pairwise_acceleration(swipe)
+        # feature_values[
+        #     "Average Pairwise acceleration"
+        # ] = Feature_Extractor.calculate_average_pairwise_acceleration(swipe)
         feature_values["Percentile Velocity"] = Feature_Extractor.percentile_velocity(
             swipe
         )
