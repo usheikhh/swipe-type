@@ -1,3 +1,4 @@
+from rich.traceback import install
 from core.features import Feature_Extractor
 from core.swipe_extractor import (
     compute_timestamp_deltas,
@@ -16,6 +17,7 @@ from tqdm import tqdm
 from core.util import flatten
 
 if __name__ == "__main__":
+    install()
     # write_all_word_logs()
     p = os.path.join(os.getcwd(), "data")
     swipeset = []

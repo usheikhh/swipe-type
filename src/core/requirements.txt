@@ -3,5 +3,5 @@ matplotlib
 scipy
 black
 tqdm
-pyenchant
 numpy
+rich

@@ -5,7 +5,6 @@ from core.swipe_extractor import (
     unique_words_from_file,
     write_to_file,
 )
-import enchant
 from tqdm import tqdm
 
 
@@ -53,16 +52,6 @@ def delete_json_files(dir_path: str):
             os.remove(os.path.join(root_path, file_name + ".json"))
 
 
-def remove_non_english_words(dir_path: str):
-    root_path = os.path.join(os.getcwd(), dir_path)
-    d = enchant.Dict("en_US")
-    for file in os.listdir(root_path):
-        file_name = os.path.splitext(file)[0]
-        if not file_name == ".DS_Store":
-            if d.check(file_name) == False:
-                os.remove(os.path.join(root_path, file_name + ".log"))
-
-
 if __name__ == "__main__":
     try:
         get_all_json_files("data/")
@@ -72,4 +61,3 @@ if __name__ == "__main__":
         generate_word_files()
     except UnicodeDecodeError:
         pass
-    # remove_non_english_words("src/core/temp")
