@@ -1,12 +1,10 @@
 import warnings
 import pickle
 import timeit
-import matplotlib.pyplot as plt
 from tqdm import tqdm
 import math
 import statistics
 from algo import score_calc
-from util import flatten
 from features import Feature_Extractor
 from swipe_extractor import (
     compute_timestamp_deltas,
@@ -224,49 +222,6 @@ def generate_all_genuine_scores():
                 pickle.dump(genuine_scores, f)
         except FileNotFoundError:
             pass
-
-
-def avg_swipes():
-    p = os.path.join(os.getcwd(), "data")
-    onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
-    file_swipes = []
-    for file in tqdm(onlyfiles):
-        if file == ".DS_Store":
-            pass
-        print(file)
-        s = 0
-        if file == ".log":
-            return
-        else:
-            user = User(
-                file,
-                os.path.join(os.getcwd(), "data", file),
-            )
-            for swipe in user.make_all_swipes().items():
-                s += 1
-        file_swipes.append(s)
-        # print(file_swipes)
-    return sum(file_swipes) / len(file_swipes)
-
-
-def swipe_length_histogram():
-    p = os.path.join(os.getcwd(), "data")
-    onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
-    swipe_lengths = []
-    swipes = []
-    for file in tqdm(onlyfiles):
-        user = User(
-            file,
-            os.path.join(os.getcwd(), "data", file),
-        )
-        swipes.append(user.make_all_swipes())
-    flat_swipes = flatten(swipes)
-    for swipe in tqdm(flat_swipes):
-        swipe_lengths.append(Feature_Extractor.length(swipe))
-    avg = sum(swipe_lengths) / len(swipe_lengths)
-    st_dev = statistics.stdev(swipe_lengths)
-    print("Avg:", avg)
-    print("st. dev", st_dev)
 
 
 if __name__ == "__main__":
