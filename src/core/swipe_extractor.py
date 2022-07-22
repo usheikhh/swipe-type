@@ -43,7 +43,7 @@ def unique_words(df: pd.DataFrame):
 
 
 def unique_words_from_file(path: str):
-    file = open(path, "r")
+    file = open(path, "r", encoding="UTF-8")
     lines = file.readlines()
     search_space = lines[1:]
     found = set()
@@ -76,7 +76,7 @@ def unique_sentences(df: pd.DataFrame):
 
 
 def extract_trajectories(path: str, key: str):
-    file = open(path, "r")
+    file = open(path, "r", encoding="UTF-8")
     lines = file.readlines()
     found = []
     for line in lines:
@@ -90,7 +90,7 @@ def write_to_file(data, key):
     # data_file = Path(os.path.join(os.getcwd(), "src", "py", "temp", key + ".log"))
     data_file = Path(os.path.join(os.getcwd(), "src", "core", "temp", key + ".log"))
     data_file.touch(exist_ok=True)
-    f = open(data_file, "w+")
+    f = open(data_file, "w+", encoding="UTF-8")
     for line in data:
         word = list(line.split(" "))[10]
         if key == word:
@@ -98,7 +98,7 @@ def write_to_file(data, key):
 
 
 def extract_timestamps_from_file(path: str, header_present=False):
-    file = open(path, "r")
+    file = open(path, "r", encoding="UTF-8")
     lines = file.readlines()
     timestamps = []
     for line in lines:
@@ -155,11 +155,7 @@ def extract_swipes_indices(deltas: List[int]):
     # print("deltas: ", (deltas))
     if precheck_deltas(deltas) == True:
         return None
-    above = []
-    for i in range(0, len(deltas)):
-        if deltas[i] >= THRESHOLD:
-            above.append(i)
-    return above
+    return [i for i in range(len(deltas)) if deltas[i] > THRESHOLD]
 
 
 def into_intervals(indices: List[int]):
