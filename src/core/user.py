@@ -132,7 +132,7 @@ def process_files():
                 # print(" Genuine scores", genuine_scores)
 
                 # Printing out impostor scores
-                other_file_total= impostor_user.make_all_swipes()
+                other_file_total = impostor_user.make_all_swipes()
                 print(" Impostor file swipe count:", len(other_file_total))
                 print(impostor_file)
                 for swipe in other_file_total:
@@ -140,7 +140,9 @@ def process_files():
                 if not os.path.exists(
                     os.path.join(os.getcwd(), "gen", os.path.splitext(file)[0])
                 ):
-                    os.makedirs(os.path.join(os.getcwd(), "gen", os.path.splitext(file)[0]))
+                    os.makedirs(
+                        os.path.join(os.getcwd(), "gen", os.path.splitext(file)[0])
+                    )
                 imposter_file_path = os.path.join(
                     os.getcwd(),
                     "gen",
