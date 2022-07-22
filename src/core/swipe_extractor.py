@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 from typing import List
-from swipe import Backing_File, Swipe
+from .swipe import Backing_File, Swipe
 from pathlib import Path
 import matplotlib.pyplot as plt
 from tqdm import tqdm
@@ -103,21 +103,19 @@ def extract_timestamps_from_file(path: str, header_present=False):
     timestamps = []
     for line in lines:
         res = list(line.split(" "))[1]
-        word = list(line.split(" "))[10]
         timestamps.append((res))
     if header_present == True:
-        return (timestamps[1:], word)
+        return timestamps[1:]
     elif header_present == False:
-        return (timestamps, word)
+        return timestamps
 
 
 def extract_timestamps_from_lines(lines: List[str]):
     timestamps = []
     for line in lines:
         res = list(line.split(" "))[1]
-        word = list(line.split(" "))[10]
         timestamps.append((res))
-    return (timestamps, word)
+    return timestamps
 
 
 def compute_timestamp_deltas(timestamps: List[int]):
