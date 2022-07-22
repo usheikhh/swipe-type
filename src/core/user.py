@@ -94,10 +94,6 @@ class User:
         print("probe size:", probe_size)
         template = swipes[:template_size]
         probe = swipes[template_size:]
-
-        print("length of template list:", len(template))
-        print("length of probe list:", len(probe))
-
         return (template, probe)
 
 
@@ -125,38 +121,37 @@ def process_files():
         with open(PIK, "wb") as f:
             pickle.dump(genuine_scores, f)
         for impostor_file in tqdm(onlyfiles):
-            impostor_user = User(
-                impostor_file, os.path.join(os.getcwd(), "data", impostor_file)
-            )
-            impostor_scores = []
-            # print(" Genuine scores", genuine_scores)
+            if impostor_file == file:
+                print("SAME FILE REACHED")
+                pass
+            else:
+                impostor_user = User(
+                    impostor_file, os.path.join(os.getcwd(), "data", impostor_file)
+                )
+                impostor_scores = []
+                # print(" Genuine scores", genuine_scores)
 
-            # Printing out impostor scores
-            other_file_template, other_file_impostor = impostor_user.divide_swipes(
-                impostor_user.make_all_swipes()
-            )
-            other_file_total = other_file_impostor + other_file_template
-            print("Other File Impostor:", len(other_file_impostor))
-            print("Other File Template:", len(other_file_template))
-            # print("total swipes in Other file", len(other_file_total))
-            print(impostor_file)
-            for swipe in other_file_total:
-                impostor_scores.append(score_calc(template_features, swipe))
-            if not os.path.exists(
-                os.path.join(os.getcwd(), "gen", os.path.splitext(file)[0])
-            ):
-                os.makedirs(os.path.join(os.getcwd(), "gen", os.path.splitext(file)[0]))
-            imposter_file_path = os.path.join(
-                os.getcwd(),
-                "gen",
-                os.path.splitext(file)[0],
-                "imposter_" + impostor_file,
-            )
-            # print(imposter_file_path)
+                # Printing out impostor scores
+                other_file_total= impostor_user.make_all_swipes()
+                print(" Impostor file swipe count:", len(other_file_total))
+                print(impostor_file)
+                for swipe in other_file_total:
+                    impostor_scores.append(score_calc(template_features, swipe))
+                if not os.path.exists(
+                    os.path.join(os.getcwd(), "gen", os.path.splitext(file)[0])
+                ):
+                    os.makedirs(os.path.join(os.getcwd(), "gen", os.path.splitext(file)[0]))
+                imposter_file_path = os.path.join(
+                    os.getcwd(),
+                    "gen",
+                    os.path.splitext(file)[0],
+                    "imposter_" + impostor_file,
+                )
+                # print(imposter_file_path)
 
-            with open(imposter_file_path, "wb") as f:
-                pickle.dump(impostor_scores, f)
-        # print("impostor scores:\n", impostor_scores)
+                with open(imposter_file_path, "wb") as f:
+                    pickle.dump(impostor_scores, f)
+            # print("impostor scores:\n", impostor_scores)
 
 
 def loadall(filename):
