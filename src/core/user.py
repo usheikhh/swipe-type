@@ -17,7 +17,7 @@ from swipe_extractor import (
 from swipe_extractor import unique_words_from_file
 import os
 
-SWIPE_LENGTH_THRESHOLD = 0  # Mean + 1 standard deviation above
+SWIPE_LENGTH_THRESHOLD = 437  # Mean + 1 standard deviation above
 install()
 
 
@@ -76,7 +76,8 @@ class User:
                     # print("SWIPE LENGTH IS:", Feature_Extractor.length(swipe))
                     # print("BEFORE HELD SWIPES:", len(swipeset))
                     # input()
-                    swipeset.append(swipe)
+                    if Feature_Extractor.length(swipe) >= SWIPE_LENGTH_THRESHOLD:
+                        swipeset.append(swipe)
                     # print("AFTER HELD SWIPES:", len(swipeset))
                     # input()
             elif indices is None:
@@ -124,15 +125,20 @@ def process_files():
         with open(PIK, "wb") as f:
             pickle.dump(genuine_scores, f)
         for impostor_file in tqdm(onlyfiles):
+            impostor_user = User(
+                impostor_file, os.path.join(os.getcwd(), "data", impostor_file)
+            )
             impostor_scores = []
             # print(" Genuine scores", genuine_scores)
 
             # Printing out impostor scores
-            other_file_template, other_file_impostor = user.divide_swipes(
-                user.make_all_swipes()
+            other_file_template, other_file_impostor = impostor_user.divide_swipes(
+                impostor_user.make_all_swipes()
             )
             other_file_total = other_file_impostor + other_file_template
-            print("total swipes in Other file", len(other_file_total))
+            print("Other File Impostor:", len(other_file_impostor))
+            print("Other File Template:", len(other_file_template))
+            # print("total swipes in Other file", len(other_file_total))
             print(impostor_file)
             for swipe in other_file_total:
                 impostor_scores.append(score_calc(template_features, swipe))
