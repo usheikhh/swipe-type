@@ -27,7 +27,7 @@ if __name__ == "__main__":
         for unique_word in unique_words_from_file(
             os.path.join(os.getcwd(), "data", file)
         ):
-            timestamps, word = extract_timestamps_from_file(
+            timestamps = extract_timestamps_from_file(
                 os.path.join(os.getcwd(), "src", "core", "temp", unique_word + ".log")
             )
 
@@ -43,7 +43,7 @@ if __name__ == "__main__":
                 # input()
                 swipes = create_swipes(
                     timestamps,
-                    word,
+                    unique_word,
                     intervals,
                     os.path.join(
                         os.getcwd(), "src", "core", "temp", unique_word + ".log"
@@ -54,6 +54,6 @@ if __name__ == "__main__":
                 warnings.warn(
                     "No indices above the threshold, so swipes cannot be made"
                 )
-    flat_swipes = flatten(swipeset)
-    for swipe in tqdm(flat_swipes):
-        (Feature_Extractor.extract_all_features(swipe))
+    # flat_swipes = flatten(swipeset)
+    # for swipe in tqdm(flat_swipes):
+    #     (Feature_Extractor.extract_all_features(swipe))
