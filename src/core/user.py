@@ -1,4 +1,5 @@
 import warnings
+from rich.traceback import install
 import pickle
 import timeit
 from tqdm import tqdm
@@ -15,6 +16,9 @@ from swipe_extractor import (
 )
 from swipe_extractor import unique_words_from_file
 import os
+
+SWIPE_LENGTH_THRESHOLD = 0  # Mean + 1 standard deviation above
+install()
 
 
 def make_template(swipes):
@@ -68,7 +72,13 @@ class User:
                     ),
                 )
                 for swipe in swipes:
+                    # print("SWIPE COUNT IS:", len(swipes))
+                    # print("SWIPE LENGTH IS:", Feature_Extractor.length(swipe))
+                    # print("BEFORE HELD SWIPES:", len(swipeset))
+                    # input()
                     swipeset.append(swipe)
+                    # print("AFTER HELD SWIPES:", len(swipeset))
+                    # input()
             elif indices is None:
                 warnings.warn(
                     "No indices above the threshold, so swipes cannot be made"
@@ -91,62 +101,55 @@ class User:
 
 
 def process_files():
-    PIK = "genuine.dat"
-    sum = 0
-    user = User(
-        "2c30a5a6amjsgs1ganoo6kg2lb",
-        os.path.join(os.getcwd(), "data", "2c30a5a6amjsgs1ganoo6kg2lb.log"),
-    )
-    for v in user.make_all_swipes():
-        # print(k)
-        sum += len(v)
-    # print(sum)
-    features = []
-    a, b = user.divide_swipes(user.make_all_swipes(), sum)
-    for swipe in a:
-        features.append(Feature_Extractor.extract_all_features_to_list(swipe))
-    # print(features)
-    # print(make_template(features))
-
-    # this prints out all the genuine scores
-    u = 0
-    genuine_scores = []
-    template_features = make_template(features)
-    for swipe in b:
-        genuine_scores.append(score_calc(template_features, swipe))
-        u += 1
-    genuine_scores.sort()
-    with open(PIK, "wb") as f:
-        pickle.dump(genuine_scores, f)
-    # print(" Genuine scores", genuine_scores)
-
-    # Printing out impostor scores
-    impostor_scores = []
     p = os.path.join(os.getcwd(), "data")
     onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
+    PIK = "genuine.dat"
     for file in tqdm(onlyfiles):
         user = User(
             file,
             os.path.join(os.getcwd(), "data", file),
         )
-        sum = 0
-        for k, v in user.make_all_swipes().items():
-            # print(k)
-            sum += len(v)
-        print("Swipe Length:", sum)
-        other_file_template, other_file_impostor = user.divide_swipes(
-            user.make_all_swipes(), sum
-        )
-        other_file_total = other_file_impostor + other_file_template
-        print("total swipes in Other file", len(other_file_total))
-        print(file)
-        for swipe in other_file_total:
-            impostor_scores.append(score_calc(template_features, swipe))
-        imposter_file_path = os.path.join(os.getcwd(), "gen", "imposter_" + file)
-        # print(imposter_file_path)
+        features = []
+        a, b = user.divide_swipes(user.make_all_swipes())
+        for swipe in a:
+            features.append(Feature_Extractor.extract_all_features_to_list(swipe))
+        # print(features)
+        # print(make_template(features))
 
-        with open(imposter_file_path, "wb") as f:
-            pickle.dump(impostor_scores, f)
+        # this prints out all the genuine scores
+        genuine_scores = []
+        template_features = make_template(features)
+        for swipe in b:
+            genuine_scores.append(score_calc(template_features, swipe))
+        with open(PIK, "wb") as f:
+            pickle.dump(genuine_scores, f)
+        for impostor_file in tqdm(onlyfiles):
+            impostor_scores = []
+            # print(" Genuine scores", genuine_scores)
+
+            # Printing out impostor scores
+            other_file_template, other_file_impostor = user.divide_swipes(
+                user.make_all_swipes()
+            )
+            other_file_total = other_file_impostor + other_file_template
+            print("total swipes in Other file", len(other_file_total))
+            print(impostor_file)
+            for swipe in other_file_total:
+                impostor_scores.append(score_calc(template_features, swipe))
+            if not os.path.exists(
+                os.path.join(os.getcwd(), "gen", os.path.splitext(file)[0])
+            ):
+                os.makedirs(os.path.join(os.getcwd(), "gen", os.path.splitext(file)[0]))
+            imposter_file_path = os.path.join(
+                os.getcwd(),
+                "gen",
+                os.path.splitext(file)[0],
+                "imposter_" + impostor_file,
+            )
+            # print(imposter_file_path)
+
+            with open(imposter_file_path, "wb") as f:
+                pickle.dump(impostor_scores, f)
         # print("impostor scores:\n", impostor_scores)
 
 
@@ -190,29 +193,25 @@ def generate_all_genuine_scores():
     p = os.path.join(os.getcwd(), "data")
     onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
     for file in tqdm(onlyfiles):
-        sum = 0
         user = User(
             file,
             os.path.join(os.getcwd(), "data", file),
         )
-        for k, v in user.make_all_swipes().items():
-            # print(k)
-            sum += len(v)
         # print(sum)
         features = []
-        a, b = user.divide_swipes(user.make_all_swipes(), sum)
+        a, b = user.divide_swipes(user.make_all_swipes())
         for swipe in a:
             features.append(Feature_Extractor.extract_all_features_to_list(swipe))
         # print(features)
         # print(make_template(features))
 
         # this prints out all the genuine scores
-        u = 0
         genuine_scores = []
+        # starting_time = timeit.default_timer()
         template_features = make_template(features)
+        # print("Time difference :", timeit.default_timer() - starting_time)
         for swipe in b:
             genuine_scores.append(score_calc(template_features, swipe))
-            u += 1
         genuine_file_path = os.path.join(
             os.getcwd(), "genuine_scores", "genuine_" + file
         )
@@ -225,19 +224,4 @@ def generate_all_genuine_scores():
 
 
 if __name__ == "__main__":
-    p = os.path.join(os.getcwd(), "data")
-    features = []
-    onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
-    genuine_scores = []
-    for file in tqdm(onlyfiles):
-        # print("Start time :", starting_time)
-        user = User(
-            file,
-            os.path.join(os.getcwd(), "data", file),
-        )
-
-        a, b = user.divide_swipes(user.make_all_swipes())
-        for swipe in a:
-            starting_time = timeit.default_timer()
-            features.append(Feature_Extractor.extract_all_features_to_list(swipe))
-            print("Time difference :", timeit.default_timer() - starting_time)
+    process_files()
