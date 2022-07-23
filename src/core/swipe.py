@@ -6,7 +6,7 @@ class Backing_File:
         return self.path
 
     def lookup_row_by_timestamp(self, timestamp: str):
-        f = open(self.get_path(), "r")
+        f = open(self.get_path(), "r", encoding="UTF-8")
         lines = f.readlines()
         for line in lines:
             if line.split(" ")[1] == timestamp:
