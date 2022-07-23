@@ -134,4 +134,5 @@ src/js/node_modules
 src/js/package-lock.json
 *.png
 *.svg
-*/DS_Store/*
+*/.DS_Store/*
+*.pem

@@ -49,7 +49,7 @@ class User:
         swipeset = []
         words = unique_words_from_file(self.get_path())
         for unique_word in words:
-            timestamps, word = extract_timestamps_from_file(
+            timestamps = extract_timestamps_from_file(
                 os.path.join(os.getcwd(), "src", "core", "temp", unique_word + ".log")
             )
 
@@ -65,7 +65,7 @@ class User:
                 # input()
                 swipes = create_swipes(
                     timestamps,
-                    word,
+                    unique_word,
                     intervals,
                     os.path.join(
                         os.getcwd(), "src", "core", "temp", unique_word + ".log"
