@@ -5,7 +5,8 @@ import timeit
 from tqdm import tqdm
 import math
 import statistics
-from algo import score_calc
+from algo import score_calc, DET_curve
+from util import flatten
 from features import Feature_Extractor
 from swipe_extractor import (
     compute_timestamp_deltas,
@@ -227,11 +228,25 @@ def generate_all_genuine_scores():
 
 
 if __name__ == "__main__":
-    process_files()
-    # print(
-    #     list(
-    #         loadall(
-    #             "/Users/alvinkuruvilla/Dev/swipe-type/impostors_data/r5idk8jujjcd6fg9acbonms58p/imposter_r8br38gs97dttk4eace5on7noi.log"
-    #         )
-    #     )
-    # )
+    # process_files()
+    s = 0
+    genuine_scores_list = flatten(
+        list(loadall("/Users/alvinkuruvilla/Dev/swipe-type/aws-genuine.dat"))
+    )
+    impostor_scores_list = []
+    p = os.path.join(os.getcwd(), "impostors_data")
+    folder_names = [f for f in os.listdir(p) if os.path.isdir(os.path.join(p, f))]
+    # print(folder_names)
+    for folder_name in folder_names:
+        p2 = os.path.join(os.getcwd(), "impostors_data", folder_name)
+        file_names = [f for f in os.listdir(p2) if os.path.isfile(os.path.join(p2, f))]
+        for file in file_names:
+            print(os.path.join(p2, file))
+            s += len(flatten(list((loadall(os.path.join(p2, file))))))
+            impostor_scores_list.append(
+                (flatten(list((loadall(os.path.join(p2, file))))))
+            )
+    # print(flatten(impostor_scores_list))
+    # print(len(flatten(impostor_scores_list)))
+    # print("SUM:", s)
+    DET_curve(0, 8000, genuine_scores_list, flatten(impostor_scores_list))
