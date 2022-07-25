@@ -136,3 +136,4 @@ src/js/package-lock.json
 *.svg
 */.DS_Store/*
 *.pem
+impostors_data/

@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 from typing import List
-from .swipe import Backing_File, Swipe
+from swipe import Backing_File, Swipe
 from pathlib import Path
 import matplotlib.pyplot as plt
 from tqdm import tqdm
@@ -57,6 +57,7 @@ def unique_words_from_file(path: str):
             and word != "pembina"
             and word != "interactions"
             and word != "haciendo"
+            and len(word) > 1
         ):
             found.add(word)
     return found
