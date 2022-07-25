@@ -118,7 +118,7 @@ def process_files():
         template_features = make_template(features)
         for swipe in b:
             genuine_scores.append(score_calc(template_features, swipe))
-        with open(PIK, "wb") as f:
+        with open(PIK, "ab") as f:
             pickle.dump(genuine_scores, f)
         for impostor_file in tqdm(onlyfiles):
             if impostor_file == file:
@@ -151,7 +151,7 @@ def process_files():
                 )
                 # print(imposter_file_path)
 
-                with open(imposter_file_path, "wb") as f:
+                with open(imposter_file_path, "ab") as f:
                     pickle.dump(impostor_scores, f)
             # print("impostor scores:\n", impostor_scores)
 
@@ -228,3 +228,10 @@ def generate_all_genuine_scores():
 
 if __name__ == "__main__":
     process_files()
+    # print(
+    #     list(
+    #         loadall(
+    #             "/Users/alvinkuruvilla/Dev/swipe-type/impostors_data/r5idk8jujjcd6fg9acbonms58p/imposter_r8br38gs97dttk4eace5on7noi.log"
+    #         )
+    #     )
+    # )
