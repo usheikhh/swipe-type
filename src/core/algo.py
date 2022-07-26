@@ -1,7 +1,7 @@
 from scipy.spatial.distance import cityblock
 from math import sqrt
 import numpy as np
-from features import Feature_Extractor
+from core.features import Feature_Extractor
 import matplotlib.pyplot as plt
 
 

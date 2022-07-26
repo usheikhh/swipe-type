@@ -1,4 +1,4 @@
-from swipe import Swipe
+from core.swipe import Swipe
 from math import floor
 
 
