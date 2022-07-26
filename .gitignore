@@ -137,3 +137,4 @@ src/js/package-lock.json
 */.DS_Store/*
 *.pem
 impostors_data/
+*.zip
