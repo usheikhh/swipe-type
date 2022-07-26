@@ -94,3 +94,30 @@ def average_swipe_length():
 
 if __name__ == "__main__":
     average_swipe_length()
+
+
+def stats():
+    p = os.path.join(os.getcwd(), "data")
+    onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
+    genuine_scores = []
+    for file in tqdm(onlyfiles):
+        user = User(
+            file,
+            os.path.join(os.getcwd(), "data", file),
+        )
+        features = []
+        a, b = user.divide_swipes(user.make_all_swipes())
+
+        for swipe in a:
+            features.append(Feature_Extractor.extract_all_features_to_list(swipe))
+
+        template_features = make_template(features)
+        for swipe in b:
+            genuine_scores.append(score_calc(template_features, swipe))
+
+    print("AVG:", sum(genuine_scores) / len(genuine_scores))
+    print("Mean:", statistics.mean(genuine_scores))
+    print("Median:", statistics.median(genuine_scores))
+    print("St. dev:", statistics.stdev(genuine_scores))
+
+    return genuine_scores
