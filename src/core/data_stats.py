@@ -1,9 +1,10 @@
 import os
 import statistics
 from tqdm import tqdm
+from algo import score_calc
+from user import make_template, User
 from features import Feature_Extractor
 
-from user import User
 from util import flatten
 
 
