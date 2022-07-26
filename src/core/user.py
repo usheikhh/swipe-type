@@ -16,7 +16,7 @@ from core.swipe_extractor import (
 )
 import os
 
-SWIPE_LENGTH_THRESHOLD = 437  # Mean + 1 standard deviation above
+SWIPE_LENGTH_THRESHOLD = 130  # Pick a value slightly lower than the mean of 137
 install()
 
 
