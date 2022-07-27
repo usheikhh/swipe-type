@@ -138,3 +138,4 @@ src/js/package-lock.json
 *.pem
 impostors_data/
 *.zip
+experiments/
