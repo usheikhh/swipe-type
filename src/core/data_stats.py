@@ -13,6 +13,7 @@ files = 0
 
 
 def count_timestamps(header_present=True):
+    """Count all the timestamps present in each file in the dataset"""
     file_count = 0
     timestamps = []
     p = os.path.join(os.getcwd(), "data")
@@ -36,21 +37,8 @@ def count_timestamps(header_present=True):
 print(count_timestamps())
 
 
-def extract_timestamps_from_file(path: str, header_present=True):
-    file = open(path, "r")
-    lines = file.readlines()
-    timestamps = []
-    for line in lines:
-        res = list(line.split(" "))[1]
-        word = list(line.split(" "))[10]
-        timestamps.append((res))
-    if header_present == True:
-        return sum(timestamps[1:])
-    elif header_present == False:
-        return sum(timestamps)
-
-
 def avg_swipes():
+    """Count the average number of swipes for all the files in the dataset directory"""
     p = os.path.join(os.getcwd(), "data")
     onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
     file_swipes = []
@@ -74,6 +62,7 @@ def avg_swipes():
 
 
 def average_swipe_length():
+    """Get the average swipe length and its standard deviation across all the swipes of all the dataset files"""
     p = os.path.join(os.getcwd(), "data")
     onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
     swipe_lengths = []
@@ -93,11 +82,13 @@ def average_swipe_length():
     print("st. dev", st_dev)
 
 
-if __name__ == "__main__":
-    average_swipe_length()
-
-
 def stats():
+    """Collect some statistics on the genuine scores:
+    1) Average
+    2) Mean
+    3) Median
+    4) Standard Deviation
+    """
     p = os.path.join(os.getcwd(), "data")
     onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
     genuine_scores = []
@@ -122,3 +113,7 @@ def stats():
     print("St. dev:", statistics.stdev(genuine_scores))
 
     return genuine_scores
+
+
+if __name__ == "__main__":
+    average_swipe_length()
