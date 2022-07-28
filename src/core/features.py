@@ -1,6 +1,6 @@
 from core.swipe import Swipe
 from math import floor
-
+from core.log import Logger
 
 # This function creates an array of the length of from point to point
 def pairwise_length_vector(swipe: Swipe):
@@ -21,6 +21,23 @@ def pairwise_length_vector(swipe: Swipe):
         y2 = y_coords[i + 1]
         length_vector.append(pow(pow((y2 - y1), 2) + pow((x2 - x1), 2), 0.5))
     return length_vector
+
+
+def straight_line_distance(swipe: Swipe):
+    times = swipe.first_and_last_timestamp()
+    assert len(times) == 2
+    first_timestamp = times[0]
+    last_timestamp = times[1]
+    x1 = int(swipe.x_pos(first_timestamp))
+    x2 = int(swipe.x_pos(last_timestamp))
+    y1 = int(swipe.y_pos(first_timestamp))
+    y2 = int(swipe.y_pos(last_timestamp))
+    try:
+        return float((y2 - y1) / (x2 - x1))
+    except ZeroDivisionError:
+        log = Logger()
+        log.km_error("Divide by zero error when calculating straight line distance")
+        return 0
 
 
 def pairwise_velocity_vector(swipe: Swipe):
@@ -107,21 +124,23 @@ class Feature_Extractor:
         return sum(pairwise_acceleration_vector(swipe))
 
     @staticmethod
-    def calculate_average_pairwise_acceleration(swipe: Swipe):
-        # This is equivalent to what we refer to as total swipe acceleration in the week 7 slides
-        # print("Pairwise acceleration:", pairwise_acceleration_vector(swipe))
-        return float(
-            sum(pairwise_acceleration_vector(swipe))
-            / len(pairwise_acceleration_vector(swipe))
-        )
-
-    @staticmethod
     def percentile_velocity(initial_swipe: Swipe, percentile: float = 0.2):
         if percentile >= 1.0 or percentile <= 0.0:
             raise ValueError("Percentile should be between 0 and 1 non-inclusive")
         velocity_vector = pairwise_velocity_vector(initial_swipe)
         row_count = floor(len(velocity_vector) * percentile)
         return sum(velocity_vector[0:row_count])
+
+    @staticmethod
+    def deviation_ratio(swipe: Swipe):
+        try:
+            return float(
+                Feature_Extractor.length(swipe) / abs(straight_line_distance(swipe))
+            )
+        except ZeroDivisionError:
+            log = Logger()
+            log.km_error("Divide by zero error when calculating deviation ratio")
+            return 0
 
     @staticmethod
     def extract_all_features(swipe: Swipe):
@@ -131,12 +150,10 @@ class Feature_Extractor:
         feature_values[
             "Pairwise acceleration"
         ] = Feature_Extractor.calculate_pairwise_acceleration(swipe)
-        # feature_values[
-        #     "Average Pairwise acceleration"
-        # ] = Feature_Extractor.calculate_average_pairwise_acceleration(swipe)
         feature_values["Percentile Velocity"] = Feature_Extractor.percentile_velocity(
             swipe
         )
+        feature_values["Deviation Ratio"] = Feature_Extractor.deviation_ratio(swipe)
         return feature_values
 
     @staticmethod
