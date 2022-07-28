@@ -21,14 +21,14 @@ install()
 
 
 def make_template(swipes):
-    mean_template = [0, 0, 0, 0]
+    mean_template = [0, 0, 0, 0, 0]
 
     for feature_set in swipes:
-        assert len(feature_set) == 4
-        for x in range(0, 4):
+        assert len(feature_set) == 5
+        for x in range(0, 5):
             mean_template[x] += feature_set[x]
-    for y in range(0, 4):
-        mean_template[y] /= 4
+    for y in range(0, 5):
+        mean_template[y] /= 5
 
     return mean_template
 
