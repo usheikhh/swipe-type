@@ -80,5 +80,9 @@ def DET_curve(
     plt.plot(t, FAR_values, label="FAR Values")
     plt.plot(t, FRR_values, label="FRR Values")
     plt.legend()
+    # plt.suptitle("Length Feature FAR vs FRR curve")
+    plt.xlabel("Threshold", fontsize=18)
+    plt.ylabel("Percentage", fontsize=16)
+
     plt.savefig("DET.png")
     plt.show()
