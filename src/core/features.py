@@ -32,6 +32,7 @@ def straight_line_distance(swipe: Swipe):
     x2 = int(swipe.x_pos(last_timestamp))
     y1 = int(swipe.y_pos(first_timestamp))
     y2 = int(swipe.y_pos(last_timestamp))
+    # TODO: Find better ways to handle division by zero errors
     try:
         return float((y2 - y1) / (x2 - x1))
     except ZeroDivisionError:
