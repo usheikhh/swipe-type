@@ -24,6 +24,7 @@ def pairwise_length_vector(swipe: Swipe):
 
 
 def straight_line_distance(swipe: Swipe):
+    # Thus function computes the slope of a particular swipe
     times = swipe.first_and_last_timestamp()
     assert len(times) == 2
     first_timestamp = times[0]
@@ -42,6 +43,7 @@ def straight_line_distance(swipe: Swipe):
 
 
 def pairwise_velocity_vector(swipe: Swipe):
+    # Return an array with all of the point to point velocities of a swipe
     length_vector = pairwise_length_vector(swipe)
     delta_vector = Feature_Extractor.time_delta(swipe)
     # print(len(length_vector), len(delta_vector))
@@ -63,6 +65,7 @@ def pairwise_velocity_vector(swipe: Swipe):
 
 
 def pairwise_acceleration_vector(swipe: Swipe):
+    # Return an array with all of the point to point accelerations of a swipe
     acceleration_vector = []
     velocity_vector = pairwise_velocity_vector(swipe)
     time_delta_vector = Feature_Extractor.time_delta(swipe)
@@ -81,12 +84,13 @@ class Feature_Extractor:
 
     @staticmethod
     def length(swipe: Swipe):
-        #! FIXME: We need to figure out which file is giving us a divide by zero error and why
+        # The length is calculated by summing all of the pairwise lengths
         pairwise_lengths = pairwise_length_vector(swipe)
         return sum(pairwise_lengths)
 
     @staticmethod
     def time_delta(swipe: Swipe):
+        # Return all the time deltas
         timestamps = swipe.swipe_timestamps()
         try:
             # print(timestamps)
@@ -112,16 +116,19 @@ class Feature_Extractor:
 
     @staticmethod
     def calculate_velocity(swipe: Swipe):
+        # Find the sum of all velocity vectors to find the total velocity of a swipe
         return sum(pairwise_velocity_vector(swipe))
 
     @staticmethod
     def calculate_average_velocity(swipe: Swipe):
+        # Find the average velocity of a swipe
         return float(
             sum(pairwise_velocity_vector(swipe)) / len(pairwise_velocity_vector(swipe))
         )
 
     @staticmethod
     def calculate_pairwise_acceleration(swipe: Swipe):
+        # Pairwise acceleration is the sum of all of the pairwise acceleration vector elements
         return sum(pairwise_acceleration_vector(swipe))
 
     @staticmethod
@@ -134,6 +141,7 @@ class Feature_Extractor:
 
     @staticmethod
     def deviation_ratio(swipe: Swipe):
+        # The deviation ratio is defined as the swipe length/swipe slope
         try:
             return float(
                 Feature_Extractor.length(swipe) / abs(straight_line_distance(swipe))
@@ -145,6 +153,7 @@ class Feature_Extractor:
 
     @staticmethod
     def extract_all_features(swipe: Swipe):
+        # Calculate and extract all the features into a dictionary
         feature_values = {}
         feature_values["length"] = Feature_Extractor.length(swipe)
         feature_values["Velocity"] = Feature_Extractor.calculate_velocity(swipe)
@@ -159,5 +168,6 @@ class Feature_Extractor:
 
     @staticmethod
     def extract_all_features_to_list(swipe: Swipe):
+        # Store the extracted features for a swipe in a list
         features = Feature_Extractor.extract_all_features(swipe)
         return list(features.values())
