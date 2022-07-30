@@ -3,7 +3,6 @@ from rich.traceback import install
 import pickle
 from tqdm import tqdm
 import math
-import statistics
 from core.algo import score_calc
 from core.features import Feature_Extractor
 from core.swipe_extractor import (
@@ -21,6 +20,7 @@ install()
 
 
 def make_template(swipes):
+    # Make a template of all the features of all provided swipes for a genuine user
     mean_template = [0, 0, 0, 0, 0]
 
     for feature_set in swipes:
@@ -34,6 +34,7 @@ def make_template(swipes):
 
 
 def process_files():
+    # Generate genuine and impostor score files for a given set of dataset files
     p = os.path.join(os.getcwd(), "data")
     onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
     PIK = "genuine.dat"
@@ -93,6 +94,7 @@ def process_files():
 
 
 def generate_all_genuine_scores():
+    # Generate genuine score files for a given set of dataset files
     p = os.path.join(os.getcwd(), "data")
     onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
     for file in tqdm(onlyfiles):
@@ -127,6 +129,11 @@ def generate_all_genuine_scores():
 
 
 class User:
+    # A "user" is a data structure representing a single large dataset file.
+    # From this "user" we can then generate all the swipes for the dataset file.
+    # We can also then divide these swipes for the genuine and impostor users
+    # name: The name of the dataset file.
+    # path: The path to the dataset file
     def __init__(self, name: str, path: str):
         self.name = name
         self.path = path
@@ -179,6 +186,7 @@ class User:
         return swipeset
 
     def divide_swipes(self, swipes: list):
+        # Divide the swipes into a 70:30 split
         template_size = math.floor(len(swipes) * 0.7)
         probe_size = len(swipes) - template_size
         print("Swipe Count: ", len(swipes))

@@ -1,4 +1,3 @@
-import pandas as pd
 import os
 from typing import List
 from core.swipe import Backing_File, Swipe
@@ -10,6 +9,7 @@ THRESHOLD = 30
 
 
 def plot_deltas(list_delta):
+    # Plot all the time deltas fro a single swipe
     plt.plot(list_delta, color="magenta", marker="o", mfc="pink")  # plot the data
 
     plt.xticks(range(0, len(list_delta) + 1, 1))  # set the tick frequency on x-axis
@@ -20,29 +20,8 @@ def plot_deltas(list_delta):
     plt.show()  # display the graph
 
 
-def grab_first():
-    path = os.path.join(os.getcwd(), "data")
-    first = os.listdir(path)[0]
-    print(first)
-    pd.options.display.max_columns = None
-    df = pd.read_csv(os.path.join(path, first))
-    return df
-
-
-def unique_words(df: pd.DataFrame):
-    data = df.iloc[:, :1].values.tolist()
-    store = set()
-    for row in data:
-        # Since the log file is not actually a csv we can't do a simple column name/index lookup
-        string = row[10]
-        sep = " "
-        # Use a regex of the space character to split out the sentence column from the string
-        sentence = string.split(sep, 1)[0]
-        store.add(sentence)
-    return store
-
-
 def unique_words_from_file(path: str):
+    # Find all the unique words for a dataset file
     file = open(path, "r", encoding="UTF-8")
     lines = file.readlines()
     search_space = lines[1:]
@@ -63,20 +42,8 @@ def unique_words_from_file(path: str):
     return found
 
 
-def unique_sentences(df: pd.DataFrame):
-    data = df.iloc[:, :1].values.tolist()
-    store = set()
-    for row in data:
-        # Since the log file is not actually a csv we can;t do a simple column name/index lookup
-        string = row[0]
-        sep = " "
-        # Use a regex of the space character to split out the sentence column from the string
-        sentence = string.split(sep, 1)[0]
-        store.append(sentence)
-    return store
-
-
 def extract_trajectories(path: str, key: str):
+    # Extract all the rows in the dataset file that match a particular word
     file = open(path, "r", encoding="UTF-8")
     lines = file.readlines()
     found = []
@@ -88,6 +55,7 @@ def extract_trajectories(path: str, key: str):
 
 
 def write_to_file(data, key):
+    # Write all the rows for a particular word key to a separate word level log file
     # data_file = Path(os.path.join(os.getcwd(), "src", "py", "temp", key + ".log"))
     data_file = Path(os.path.join(os.getcwd(), "src", "core", "temp", key + ".log"))
     data_file.touch(exist_ok=True)
@@ -99,6 +67,9 @@ def write_to_file(data, key):
 
 
 def extract_timestamps_from_file(path: str, header_present=False):
+    # Extract timestamps from a file. These timestamps can either be taken from a dataset
+    # file which has a header at the top which can be ignored, or taken from a word log
+    # file, which doesn't have a header
     file = open(path, "r", encoding="UTF-8")
     lines = file.readlines()
     timestamps = []
@@ -112,6 +83,7 @@ def extract_timestamps_from_file(path: str, header_present=False):
 
 
 def extract_timestamps_from_lines(lines: List[str]):
+    # Given a list of lines from a file, extract timestamps from it
     timestamps = []
     for line in lines:
         res = list(line.split(" "))[1]
@@ -120,6 +92,8 @@ def extract_timestamps_from_lines(lines: List[str]):
 
 
 def compute_timestamp_deltas(timestamps: List[int]):
+    # Given a list of timestamps we can calculate all of the time deltas which
+    # can then be used to try and make swipes
     try:
         # print(timestamps)
         curr = int(timestamps[0])
@@ -144,6 +118,9 @@ def compute_timestamp_deltas(timestamps: List[int]):
 
 
 def precheck_deltas(deltas: List[int]):
+    # A helper function to check if any deltas are above a predefined threshold.
+    # If no deltas are above the threshold, then we cannot make swipes so we return
+    # False so we can ignore it altogether
     for delta in deltas:
         if delta < THRESHOLD:
             continue
@@ -153,6 +130,7 @@ def precheck_deltas(deltas: List[int]):
 
 
 def extract_swipes_indices(deltas: List[int]):
+    # A helper function to find the list indices that are above the time delta threshold
     # print("deltas: ", (deltas))
     if precheck_deltas(deltas) == True:
         return None
@@ -160,6 +138,7 @@ def extract_swipes_indices(deltas: List[int]):
 
 
 def into_intervals(indices: List[int]):
+    # Make intervals of all the indices above the threshold so those can be used to make swipes
     intervals = []
     # print("Length of indices: ", len(indices))
     if len(indices) == 0:
@@ -182,6 +161,8 @@ def into_intervals(indices: List[int]):
 
 
 def create_swipes(timestamps: List[str], word: str, intervals, path: str):
+    # Create swipes from a list of timestamps, corresponding indices that can be used,
+    # and the word being swiped.
     # print(intervals)
     ranges = []
     for interval in intervals:
@@ -204,6 +185,7 @@ def create_swipes(timestamps: List[str], word: str, intervals, path: str):
 
 
 def write_all_word_logs():
+    # Write all the trajectories for all the words at one time
     p = os.path.join(os.getcwd(), "data")
     onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
     for file in tqdm(onlyfiles):
