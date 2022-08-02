@@ -147,5 +147,37 @@ def get_pairwise_acceleration_values():
             f.write(f"{Feature_Extractor.calculate_pairwise_acceleration(swipe)}\n")
 
 
+def get_length_values():
+    p = os.path.join(os.getcwd(), "data")
+    swipes = []
+    onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
+    for file in tqdm(onlyfiles):
+        user = User(
+            file,
+            os.path.join(os.getcwd(), "data", file),
+        )
+        swipes.append(user.make_all_swipes())
+    flat = flatten(swipes)
+    with open("length_stats.txt", "w+") as f:
+        for swipe in flat:
+            f.write(f"{Feature_Extractor.length(swipe)}\n")
+
+
+def get_percentile_velocity_values():
+    p = os.path.join(os.getcwd(), "data")
+    swipes = []
+    onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
+    for file in tqdm(onlyfiles):
+        user = User(
+            file,
+            os.path.join(os.getcwd(), "data", file),
+        )
+        swipes.append(user.make_all_swipes())
+    flat = flatten(swipes)
+    with open("percentile_stats.txt", "w+") as f:
+        for swipe in flat:
+            f.write(f"{Feature_Extractor.percentile_velocity(swipe)}\n")
+
+
 if __name__ == "__main__":
     get_pairwise_acceleration_values()
