@@ -1,11 +1,11 @@
 import os
 import statistics
 from tqdm import tqdm
-from algo import score_calc
-from user import make_template, User
-from features import Feature_Extractor
+from core.algo import score_calc
+from core.user import make_template, User
+from core.features import Feature_Extractor
 
-from util import flatten
+from core.util import flatten
 
 
 timestamps = 0
@@ -115,5 +115,18 @@ def stats():
     return genuine_scores
 
 
+def get_velocity_distribution():
+    p = os.path.join(os.getcwd(), "data")
+    swipes = []
+    onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
+    for file in tqdm(onlyfiles):
+        user = User(
+            file,
+            os.path.join(os.getcwd(), "data", file),
+        )
+        swipes.append(user.make_all_swipes())
+    print(swipes)
+
+
 if __name__ == "__main__":
-    average_swipe_length()
+    get_velocity_distribution()
