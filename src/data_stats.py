@@ -115,7 +115,7 @@ def stats():
     return genuine_scores
 
 
-def get_velocity_distribution():
+def get_velocity_values():
     p = os.path.join(os.getcwd(), "data")
     swipes = []
     onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
@@ -125,8 +125,27 @@ def get_velocity_distribution():
             os.path.join(os.getcwd(), "data", file),
         )
         swipes.append(user.make_all_swipes())
-    print(swipes)
+    flat = flatten(swipes)
+    with open("velocity_stats.txt", "w+") as f:
+        for swipe in flat:
+            f.write(f"{Feature_Extractor.calculate_velocity(swipe)}\n")
+
+
+def get_pairwise_acceleration_values():
+    p = os.path.join(os.getcwd(), "data")
+    swipes = []
+    onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
+    for file in tqdm(onlyfiles):
+        user = User(
+            file,
+            os.path.join(os.getcwd(), "data", file),
+        )
+        swipes.append(user.make_all_swipes())
+    flat = flatten(swipes)
+    with open("pairwise_acceleration_stats.txt", "w+") as f:
+        for swipe in flat:
+            f.write(f"{Feature_Extractor.calculate_pairwise_acceleration(swipe)}\n")
 
 
 if __name__ == "__main__":
-    get_velocity_distribution()
+    get_pairwise_acceleration_values()
