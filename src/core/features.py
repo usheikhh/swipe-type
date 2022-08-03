@@ -1,6 +1,16 @@
 from core.swipe import Swipe
 from math import floor
 from core.log import Logger
+import enum
+
+
+class FeatureType(enum.Enum):
+    LENGTH = 0
+    VELOCITY = 1
+    PERCENTILE = 2
+    ACCELERATION = 3
+    DEVIATION = 4
+
 
 # This function creates an array of the length of from point to point
 def pairwise_length_vector(swipe: Swipe):
