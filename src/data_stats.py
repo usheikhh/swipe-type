@@ -3,8 +3,8 @@ import statistics
 from tqdm import tqdm
 from core.algo import score_calc
 from core.user import make_template, User
-from core.features import Feature_Extractor
-
+from core.features import Feature_Extractor, FeatureType
+from collections import Counter
 from core.util import flatten
 
 
@@ -179,5 +179,34 @@ def get_percentile_velocity_values():
             f.write(f"{Feature_Extractor.percentile_velocity(swipe)}\n")
 
 
+def get_value_counts(feature_type: FeatureType):
+    data = []
+    if feature_type == FeatureType.LENGTH:
+        with open("length_stats.txt", "r") as f:
+            lines = f.readlines()
+            for line in lines:
+                data.append(float(line))
+        return (Counter(data).keys(), Counter(data).values())
+    elif feature_type == FeatureType.VELOCITY:
+        with open("velocity_stats.txt", "r") as f:
+            lines = f.readlines()
+            for line in lines:
+                data.append(float(line))
+        return (Counter(data).keys(), Counter(data).values())
+    elif feature_type == FeatureType.PERCENTILE:
+        with open("percentile_stats.txt", "r") as f:
+            lines = f.readlines()
+            for line in lines:
+                data.append(float(line))
+        return (Counter(data).keys(), Counter(data).values())
+    elif feature_type == FeatureType.ACCELERATION:
+        with open("pairwise_acceleration_stats.txt", "r") as f:
+            lines = f.readlines()
+            for line in lines:
+                data.append(float(line))
+        return (Counter(data).keys(), Counter(data).values())
+
+
 if __name__ == "__main__":
-    get_pairwise_acceleration_values()
+    keys, values = get_value_counts(FeatureType.PERCENTILE)
+    print(*list(values), sep="\n")
