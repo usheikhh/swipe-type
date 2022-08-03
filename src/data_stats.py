@@ -221,9 +221,14 @@ def get_value_counts(feature_type: FeatureType):
             for line in lines:
                 data.append(float(line))
         return (Counter(data).keys(), Counter(data).values())
+    elif feature_type == FeatureType.DEVIATION:
+        with open("deviation_stats.txt", "r") as f:
+            lines = f.readlines()
+            for line in lines:
+                data.append(float(line))
+        return (Counter(data).keys(), Counter(data).values())
 
 
 if __name__ == "__main__":
-    # keys, values = get_value_counts(FeatureType.PERCENTILE)
-    # print(*list(values), sep="\n")
-    get_deviation_ratio_values()
+    keys, values = get_value_counts(FeatureType.PERCENTILE)
+    print(*list(values), sep="\n")
