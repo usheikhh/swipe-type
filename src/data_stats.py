@@ -200,6 +200,18 @@ def get_deviation_ratio_values():
             f.write(f"{Feature_Extractor.deviation_ratio(swipe)}\n")
 
 
+def get_all_words():
+    path = os.path.join(os.getcwd(), "stats", "wordfreq.txt")
+    words = set()
+    with open(path, "r") as f:
+        lines = f.readlines()
+        for line in lines:
+            word = line.split(" ")[1]
+            print(word.strip())
+            words.add(word.strip())
+    return words
+
+
 def get_value_counts(feature_type: FeatureType):
     data = []
     if feature_type == FeatureType.LENGTH:
@@ -240,5 +252,5 @@ def get_value_counts(feature_type: FeatureType):
 
 
 if __name__ == "__main__":
-    keys, values = get_value_counts(FeatureType.PERCENTILE)
-    print(*list(values), sep="\n")
+    words = get_all_words()
+    print(words)
