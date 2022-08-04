@@ -6,6 +6,7 @@ from core.user import make_template, User
 from core.features import Feature_Extractor, FeatureType
 from collections import Counter
 from core.util import flatten
+import matplotlib.pyplot as plt
 
 
 timestamps = 0
@@ -207,7 +208,6 @@ def get_all_words():
         lines = f.readlines()
         for line in lines:
             word = line.split(" ")[1]
-            print(word.strip())
             words.add(word.strip())
     return words
 
@@ -251,6 +251,48 @@ def get_value_counts(feature_type: FeatureType):
         return (Counter(data).keys(), Counter(data).values())
 
 
-if __name__ == "__main__":
+def get_word_length_frequency():
     words = get_all_words()
-    print(words)
+    counts = Counter(len(word) for word in words)
+    print("Len  Freq")
+
+    for length in range(1, max(counts.keys()) + 1):
+        print(f"{length} {counts.get(length, 0)}")
+    data = {
+        1: 5,
+        2: 379,
+        3: 815,
+        4: 1231,
+        5: 1611,
+        6: 1781,
+        7: 1692,
+        8: 1338,
+        9: 1009,
+        10: 658,
+        11: 407,
+        12: 227,
+        13: 111,
+        14: 51,
+        15: 14,
+        16: 7,
+        17: 3,
+        18: 3,
+        19: 0,
+        20: 0,
+        21: 0,
+        22: 0,
+        23: 0,
+        24: 1,
+    }
+    lengths = list(data.keys())
+    freqs = list(data.values())
+    plt.xlabel("Word Lengths")
+    plt.ylabel("Frequency")
+    plt.title("Word Length Frequency Distribution")
+    plt.bar(lengths, freqs, color="blue")
+    plt.savefig("word_len_freqs.png")
+    plt.show()
+
+
+if __name__ == "__main__":
+    get_word_length_frequency()
