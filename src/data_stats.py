@@ -126,7 +126,8 @@ def get_velocity_values():
         )
         swipes.append(user.make_all_swipes())
     flat = flatten(swipes)
-    with open("velocity_stats.txt", "w+") as f:
+    path = os.path.join(os.getcwd(), "stats", "velocity_stats.txt")
+    with open(path, "w+") as f:
         for swipe in flat:
             f.write(f"{Feature_Extractor.calculate_velocity(swipe)}\n")
 
@@ -142,7 +143,8 @@ def get_pairwise_acceleration_values():
         )
         swipes.append(user.make_all_swipes())
     flat = flatten(swipes)
-    with open("pairwise_acceleration_stats.txt", "w+") as f:
+    path = os.path.join(os.getcwd(), "stats", "pairwise_acceleration_stats.txt")
+    with open(path, "w+") as f:
         for swipe in flat:
             f.write(f"{Feature_Extractor.calculate_pairwise_acceleration(swipe)}\n")
 
@@ -158,7 +160,8 @@ def get_length_values():
         )
         swipes.append(user.make_all_swipes())
     flat = flatten(swipes)
-    with open("length_stats.txt", "w+") as f:
+    path = os.path.join(os.getcwd(), "stats", "length_stats.txt")
+    with open(path, "w+") as f:
         for swipe in flat:
             f.write(f"{Feature_Extractor.length(swipe)}\n")
 
@@ -174,7 +177,8 @@ def get_percentile_velocity_values():
         )
         swipes.append(user.make_all_swipes())
     flat = flatten(swipes)
-    with open("percentile_stats.txt", "w+") as f:
+    path = os.path.join(os.getcwd(), "stats", "percentile_stats.txt")
+    with open(path, "w+") as f:
         for swipe in flat:
             f.write(f"{Feature_Extractor.percentile_velocity(swipe)}\n")
 
@@ -190,7 +194,8 @@ def get_deviation_ratio_values():
         )
         swipes.append(user.make_all_swipes())
     flat = flatten(swipes)
-    with open("deviation_stats.txt", "w+") as f:
+    path = os.path.join(os.getcwd(), "stats", "deviation_stats.txt")
+    with open(path, "w+") as f:
         for swipe in flat:
             f.write(f"{Feature_Extractor.deviation_ratio(swipe)}\n")
 
@@ -198,31 +203,36 @@ def get_deviation_ratio_values():
 def get_value_counts(feature_type: FeatureType):
     data = []
     if feature_type == FeatureType.LENGTH:
-        with open("length_stats.txt", "r") as f:
+        path = os.path.join(os.getcwd(), "stats", "length_stats.txt")
+        with open(path, "r") as f:
             lines = f.readlines()
             for line in lines:
                 data.append(float(line))
         return (Counter(data).keys(), Counter(data).values())
     elif feature_type == FeatureType.VELOCITY:
-        with open("velocity_stats.txt", "r") as f:
+        path = os.path.join(os.getcwd(), "stats", "velocity_stats.txt")
+        with open(path, "r") as f:
             lines = f.readlines()
             for line in lines:
                 data.append(float(line))
         return (Counter(data).keys(), Counter(data).values())
     elif feature_type == FeatureType.PERCENTILE:
-        with open("percentile_stats.txt", "r") as f:
+        path = os.path.join(os.getcwd(), "stats", "percentile_stats.txt")
+        with open(path, "r") as f:
             lines = f.readlines()
             for line in lines:
                 data.append(float(line))
         return (Counter(data).keys(), Counter(data).values())
     elif feature_type == FeatureType.ACCELERATION:
-        with open("pairwise_acceleration_stats.txt", "r") as f:
+        path = os.path.join(os.getcwd(), "stats", "pairwise_acceleration_stats.txt")
+        with open(path, "w+") as f:
             lines = f.readlines()
             for line in lines:
                 data.append(float(line))
         return (Counter(data).keys(), Counter(data).values())
     elif feature_type == FeatureType.DEVIATION:
-        with open("deviation_stats.txt", "r") as f:
+        path = os.path.join(os.getcwd(), "stats", "deviation_stats.txt")
+        with open(path, "r") as f:
             lines = f.readlines()
             for line in lines:
                 data.append(float(line))
