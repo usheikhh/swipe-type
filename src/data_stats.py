@@ -184,6 +184,20 @@ def get_percentile_velocity_values():
             f.write(f"{Feature_Extractor.percentile_velocity(swipe)}\n")
 
 
+def count_swipes():
+    p = os.path.join(os.getcwd(), "data")
+    swipes = []
+    onlyfiles = [f for f in os.listdir(p) if os.path.isfile(os.path.join(p, f))]
+    for file in tqdm(onlyfiles):
+        user = User(
+            file,
+            os.path.join(os.getcwd(), "data", file),
+        )
+        swipes.append(user.make_all_swipes())
+    flat = flatten(swipes)
+    return len(flat)
+
+
 def get_deviation_ratio_values():
     p = os.path.join(os.getcwd(), "data")
     swipes = []
