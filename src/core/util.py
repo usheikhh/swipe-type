@@ -14,3 +14,7 @@ def loadall(filepath):
                 yield pickle.load(f)
             except EOFError:
                 break
+
+
+def debug_print_list(list):
+    print(*list(list), sep="\n")
