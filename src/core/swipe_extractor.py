@@ -36,7 +36,7 @@ def unique_words_from_file(path: str):
             and word != "pembina"
             and word != "interactions"
             and word != "haciendo"
-            and len(word) > 1
+            and len(word) in (3, 7)
         ):
             found.add(word)
     return found
