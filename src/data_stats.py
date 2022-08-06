@@ -276,4 +276,4 @@ def get_word_length_frequency():
 
 
 if __name__ == "__main__":
-    print(count_swipes())
+    print("Swipe Count:", count_swipes())
