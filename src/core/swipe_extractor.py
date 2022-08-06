@@ -1,11 +1,12 @@
 import os
 from typing import List
+from core.json_config import JSON_Config
 from core.swipe import Backing_File, Swipe
 from pathlib import Path
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
-THRESHOLD = 30
+THRESHOLD = JSON_Config.time_delta_threshold()
 
 
 def plot_deltas(list_delta):

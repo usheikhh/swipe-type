@@ -5,6 +5,7 @@ from tqdm import tqdm
 import math
 from core.algo import score_calc
 from core.features import Feature_Extractor
+from core.json_config import JSON_Config
 from core.swipe_extractor import (
     compute_timestamp_deltas,
     create_swipes,
@@ -15,7 +16,9 @@ from core.swipe_extractor import (
 )
 import os
 
-SWIPE_LENGTH_THRESHOLD = 90  # Pick a value slightly lower than the mean of 137
+SWIPE_LENGTH_THRESHOLD = (
+    JSON_Config.swipe_length_threshold()
+)  # Pick a value slightly lower than the mean of 137
 install()
 
 
