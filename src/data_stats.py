@@ -55,7 +55,7 @@ def avg_swipes():
                 file,
                 os.path.join(os.getcwd(), "data", file),
             )
-            for swipe in user.make_all_swipes().items():
+            for swipe in user.make_all_swipes():
                 s += 1
         file_swipes.append(s)
         # print(file_swipes)
