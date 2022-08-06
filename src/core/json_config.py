@@ -50,5 +50,4 @@ class JSON_Config:
 
 if __name__ == "__main__":
     print(JSON_Config.swipe_length_threshold())
-    JSON_Config.adjust_config(Threshold_Type.SWIPE_LENGTH, 40)
     print(JSON_Config.swipe_length_threshold())
