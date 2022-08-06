@@ -8,10 +8,6 @@ from collections import Counter
 from core.util import flatten, frequency_histogram
 
 
-timestamps = 0
-files = 0
-
-
 def count_timestamps(header_present=True):
     """Count all the timestamps present in each file in the dataset"""
     file_count = 0
@@ -280,4 +276,4 @@ def get_word_length_frequency():
 
 
 if __name__ == "__main__":
-    get_word_length_frequency()
+    print(count_swipes())
