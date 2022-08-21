@@ -229,35 +229,70 @@ def get_value_counts(feature_type: FeatureType):
             lines = f.readlines()
             for line in lines:
                 data.append(float(line))
-        return (Counter(data).keys(), Counter(data).values())
+        data = dict(zip(Counter(data).keys(), Counter(data).values()))
+        frequency_histogram(
+            data,
+            "Length Frequency Distribution",
+            "Lengths",
+            "Frequency",
+            "length_freqs.png",
+        )
     elif feature_type == FeatureType.VELOCITY:
         path = os.path.join(os.getcwd(), "stats", "velocity_stats.txt")
         with open(path, "r") as f:
             lines = f.readlines()
             for line in lines:
                 data.append(float(line))
-        return (Counter(data).keys(), Counter(data).values())
+        data = dict(zip(Counter(data).keys(), Counter(data).values()))
+        frequency_histogram(
+            data,
+            "Velocity Frequency Distribution",
+            "Velocities",
+            "Frequency",
+            "velocity_freqs.png",
+        )
     elif feature_type == FeatureType.PERCENTILE:
         path = os.path.join(os.getcwd(), "stats", "percentile_stats.txt")
         with open(path, "r") as f:
             lines = f.readlines()
             for line in lines:
                 data.append(float(line))
-        return (Counter(data).keys(), Counter(data).values())
+        data = dict(zip(Counter(data).keys(), Counter(data).values()))
+        frequency_histogram(
+            data,
+            "Percentile Frequency Distribution",
+            "Percentiles",
+            "Frequency",
+            "percentile_freqs.png",
+        )
     elif feature_type == FeatureType.ACCELERATION:
         path = os.path.join(os.getcwd(), "stats", "pairwise_acceleration_stats.txt")
         with open(path, "w+") as f:
             lines = f.readlines()
             for line in lines:
                 data.append(float(line))
-        return (Counter(data).keys(), Counter(data).values())
+        data = dict(zip(Counter(data).keys(), Counter(data).values()))
+        frequency_histogram(
+            data,
+            "Acceleration Frequency Distribution",
+            "Accelerations",
+            "Frequency",
+            "acceleration_freqs.png",
+        )
     elif feature_type == FeatureType.DEVIATION:
         path = os.path.join(os.getcwd(), "stats", "deviation_stats.txt")
         with open(path, "r") as f:
             lines = f.readlines()
             for line in lines:
                 data.append(float(line))
-        return (Counter(data).keys(), Counter(data).values())
+        data = dict(zip(Counter(data).keys(), Counter(data).values()))
+        frequency_histogram(
+            data,
+            "Deviation Frequency Distribution",
+            "Deviations",
+            "Frequency",
+            "deviation_freqs.png",
+        )
 
 
 def get_word_length_frequency():
@@ -276,4 +311,4 @@ def get_word_length_frequency():
 
 
 if __name__ == "__main__":
-    print("Swipe Count:", count_swipes())
+    get_percentile_velocity_values()
