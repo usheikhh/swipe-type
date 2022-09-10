@@ -173,7 +173,6 @@ class Feature_Extractor:
         feature_values["Percentile Velocity"] = Feature_Extractor.percentile_velocity(
             swipe
         )
-        feature_values["Deviation Ratio"] = Feature_Extractor.deviation_ratio(swipe)
         return feature_values
 
     @staticmethod

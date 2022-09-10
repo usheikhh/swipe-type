@@ -36,7 +36,7 @@ def unique_words_from_file(path: str):
             and word != "pembina"
             and word != "interactions"
             and word != "haciendo"
-            and len(word) > 1
+            and len(word) in (3,7)
         ):
             found.add(word)
     return found
@@ -191,9 +191,9 @@ def write_all_word_logs():
     for file in tqdm(onlyfiles):
         # print(file)
         words = unique_words_from_file(os.path.join(os.getcwd(), "data", file))
-        # print(words)
         for unique_word in words:
-            # At this current moment we can reasonably assume that all the files have been generated
+            print(unique_word)
+                # At this current moment we can reasonably assume that all the files have been generated
             trajectories, word = extract_trajectories(
                 os.path.join(os.getcwd(), "data", file),
                 unique_word,
