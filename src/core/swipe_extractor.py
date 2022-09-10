@@ -1,11 +1,12 @@
 import os
 from typing import List
+from core.json_config import JSON_Config
 from core.swipe import Backing_File, Swipe
 from pathlib import Path
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
-THRESHOLD = 30
+THRESHOLD = JSON_Config.time_delta_threshold()
 
 
 def plot_deltas(list_delta):
@@ -36,7 +37,7 @@ def unique_words_from_file(path: str):
             and word != "pembina"
             and word != "interactions"
             and word != "haciendo"
-            and len(word) in (3,7)
+            and len(word) >= 3 and word <= 7
         ):
             found.add(word)
     return found

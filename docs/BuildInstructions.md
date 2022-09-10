@@ -50,6 +50,16 @@ Install dependencies in `package.json`
 npm install
 ```
 
+### Windows
+
+The dependencies can be installed directly with:
+
+```console
+npm install
+```
+
+**NOTE**: This command must be run when in the `js` directory
+
 ### Plot swiped words
 
 The `plotlog.js` file renders a swipe trajectory as a PNG file.

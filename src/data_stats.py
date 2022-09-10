@@ -5,12 +5,7 @@ from core.algo import score_calc
 from core.user import make_template, User
 from core.features import Feature_Extractor, FeatureType
 from collections import Counter
-from core.util import flatten
-import matplotlib.pyplot as plt
-
-
-timestamps = 0
-files = 0
+from core.util import flatten, frequency_histogram
 
 
 def count_timestamps(header_present=True):
@@ -234,79 +229,86 @@ def get_value_counts(feature_type: FeatureType):
             lines = f.readlines()
             for line in lines:
                 data.append(float(line))
-        return (Counter(data).keys(), Counter(data).values())
+        data = dict(zip(Counter(data).keys(), Counter(data).values()))
+        frequency_histogram(
+            data,
+            "Length Frequency Distribution",
+            "Lengths",
+            "Frequency",
+            "length_freqs.png",
+        )
     elif feature_type == FeatureType.VELOCITY:
         path = os.path.join(os.getcwd(), "stats", "velocity_stats.txt")
         with open(path, "r") as f:
             lines = f.readlines()
             for line in lines:
                 data.append(float(line))
-        return (Counter(data).keys(), Counter(data).values())
+        data = dict(zip(Counter(data).keys(), Counter(data).values()))
+        frequency_histogram(
+            data,
+            "Velocity Frequency Distribution",
+            "Velocities",
+            "Frequency",
+            "velocity_freqs.png",
+        )
     elif feature_type == FeatureType.PERCENTILE:
         path = os.path.join(os.getcwd(), "stats", "percentile_stats.txt")
         with open(path, "r") as f:
             lines = f.readlines()
             for line in lines:
                 data.append(float(line))
-        return (Counter(data).keys(), Counter(data).values())
+        data = dict(zip(Counter(data).keys(), Counter(data).values()))
+        frequency_histogram(
+            data,
+            "Percentile Frequency Distribution",
+            "Percentiles",
+            "Frequency",
+            "percentile_freqs.png",
+        )
     elif feature_type == FeatureType.ACCELERATION:
         path = os.path.join(os.getcwd(), "stats", "pairwise_acceleration_stats.txt")
         with open(path, "w+") as f:
             lines = f.readlines()
             for line in lines:
                 data.append(float(line))
-        return (Counter(data).keys(), Counter(data).values())
+        data = dict(zip(Counter(data).keys(), Counter(data).values()))
+        frequency_histogram(
+            data,
+            "Acceleration Frequency Distribution",
+            "Accelerations",
+            "Frequency",
+            "acceleration_freqs.png",
+        )
     elif feature_type == FeatureType.DEVIATION:
         path = os.path.join(os.getcwd(), "stats", "deviation_stats.txt")
         with open(path, "r") as f:
             lines = f.readlines()
             for line in lines:
                 data.append(float(line))
-        return (Counter(data).keys(), Counter(data).values())
+        data = dict(zip(Counter(data).keys(), Counter(data).values()))
+        frequency_histogram(
+            data,
+            "Deviation Frequency Distribution",
+            "Deviations",
+            "Frequency",
+            "deviation_freqs.png",
+        )
 
 
 def get_word_length_frequency():
+    data = {}
     words = get_all_words()
     counts = Counter(len(word) for word in words)
-    print("Len  Freq")
-
     for length in range(1, max(counts.keys()) + 1):
-        print(f"{length} {counts.get(length, 0)}")
-    data = {
-        1: 5,
-        2: 379,
-        3: 815,
-        4: 1231,
-        5: 1611,
-        6: 1781,
-        7: 1692,
-        8: 1338,
-        9: 1009,
-        10: 658,
-        11: 407,
-        12: 227,
-        13: 111,
-        14: 51,
-        15: 14,
-        16: 7,
-        17: 3,
-        18: 3,
-        19: 0,
-        20: 0,
-        21: 0,
-        22: 0,
-        23: 0,
-        24: 1,
-    }
-    lengths = list(data.keys())
-    freqs = list(data.values())
-    plt.xlabel("Word Lengths")
-    plt.ylabel("Frequency")
-    plt.title("Word Length Frequency Distribution")
-    plt.bar(lengths, freqs, color="blue")
-    plt.savefig("word_len_freqs.png")
-    plt.show()
+        data[length] = counts.get(length, 0)
+    frequency_histogram(
+        data,
+        "Word Length Frequency Distribution",
+        "Word Lengths",
+        "Frequency",
+        "word_len_freqs.png",
+    )
 
 
 if __name__ == "__main__":
-    print(avg_swipes())
+    get_word_length_frequency()
